@@ -16,7 +16,6 @@ app.use(express.static(__dirname + '/public'));
 
 // 화면 engine을 ejs로 설정
 app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
 
 //connect db
 connectDB();
