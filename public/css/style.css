@@ -41,18 +41,22 @@ ul {
 }
 
 .matches {
-  padding: 50px 50px;
-  border-style: solid;
-  margin: 50px 50px;
+  padding: 50px 100px;
+  /* border-style: solid; */
+  margin: 50px auto;
+  max-width: 1000px;
+  justify-content: center;
 }
 
-/* .team__name {
+.team__name {
   display: flex;
-} */
-
-.matches img {
-  width: 30px;
+  justify-content: center;
+  align-items: center;
 }
+
+/* .matches img {
+  width: 30px;
+} */
 
 .match__title {
   display: flex;
@@ -60,15 +64,18 @@ ul {
 }
 .left__team {
   display: flex;
+  width: 200px;
 }
 
 .right__team {
   display: flex;
-  right: 0px;
+  width: 200px;
+  justify-content: flex-end;
 }
 
 .vs {
   display: flex;
+  align-items: center;
 }
 .match__list {
   display: flex;
