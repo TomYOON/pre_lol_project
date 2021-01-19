@@ -13,10 +13,9 @@ router.get('/', async (req, res) => {
     res.render('main', {
       matches,
     });
-    console.log(matches);
-    console.log(matches.scheduleList);
   } catch (err) {
     console.log(err);
+    res.render('error/500');
   }
 });
 
