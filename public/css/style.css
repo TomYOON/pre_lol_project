@@ -48,6 +48,10 @@ ul {
   justify-content: center;
 }
 
+.matches h1 {
+  text-align: center;
+}
+
 .team__name {
   display: flex;
   justify-content: center;
@@ -62,6 +66,7 @@ ul {
   display: flex;
   justify-content: center;
 }
+
 .left__team {
   display: flex;
   width: 200px;

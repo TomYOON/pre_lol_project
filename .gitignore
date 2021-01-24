@@ -1,6 +1,7 @@
 # module files
 node_modules/
 .ipynb_checkpoints/
+.prettierignore
 
 # critical data
 *.env
