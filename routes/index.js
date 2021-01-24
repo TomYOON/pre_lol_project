@@ -8,11 +8,11 @@ const helper = require('../helper/helper');
 // @route GET /
 router.get('/', async (req, res) => {
   try {
-    const today = helper.formatDate(new Date('2021-01-21'));
-    // const today = formatDate(new Date());
-    const matches = await Match.find({ gameStartDate: today });
+    // const today = helper.formatDate(new Date('2021-01-21'));
+    // const today = helper.formatDate(new Date());
+    const matches = await Match.find({});
     let isEmpty = false;
-    console.log(matches[0].awayTeamName);
+    console.log(matches[0]);
     if (matches.length == 0) {
       isEmpty = true;
     }
