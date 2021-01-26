@@ -2,6 +2,9 @@ module.exports = {
   formatDate: function (date) {
     return date.toISOString().substring(0, 10);
   },
+  formatDateToMonth: function (date) {
+    return date.toISOString().substring(0, 7);
+  },
   mapTeamCode: function (teamName) {
     const team_map = {
       DRX: 'drx',

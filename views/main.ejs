@@ -15,7 +15,7 @@
     <title>pre lol</title>
   </head>
   <header>
-    <span class="title">PREPRO</span>
+    <a class="title" href='/'>PREPRO</a>
   </header>
   <div class="navbar">
     <ul class="navbar__menu">
@@ -29,29 +29,36 @@
   <body>
     <div class="matches">
       <div class="match__title">
-        <button><i class="fas fa-chevron-left"></i></button>
+        <button class="left__button"><i class="fas fa-chevron-left"></i></button>
         <span class="match__day">Today's match</span>
-        <button><i class="fas fa-chevron-right"></i></button>
+        <button class="right__button"><i class="fas fa-chevron-right"></i></button>
+        <form method="GET" action="/change-month" hidden name="changeMonth">
+          <input type="text" name="date" id="date">
+        </form>
       </div>
       <ul>
         <% if (isEmpty) {%>
-          <h1>오늘은 경기가 없습니다.</h1>
+          <h1>이번달엔 경기가 없습니다.</h1>
+          <a href="/">돌아가기</a>
           <%} else {%>
             <% for (let i = 0; i < matches.length; i++) { %>
-              <li class="match__list">
-                <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
-                <div class="left__team">
-                  <img src="/images/<%=matches[i].homeTeamCode%>.png" alt="team logo" />
-                  <span class="team__name"><%=matches[i].homeTeamName%></span>
-                </div>
-                <span class="vs">VS</span>
-                <div class="right__team">
-                  <span class="team__name"><%=matches[i].awayTeamName%></span>
-                  <img src="/images/<%=matches[i].awayTeamCode%>.png" alt="team logo" />
+              <!-- <li class="match__list"> -->
+                <form method="post" class="match__list" action='/'>
+                  <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
+                  <div class="left__team">
+                    <img src="/images/<%=matches[i].homeTeamCode%>.png" alt="team logo" />
+                    <span class="team__name"><%=matches[i].homeTeamName%></span>
+                  </div>
+                  <span class="vs">VS</span>
+                  <div class="right__team">
+                    <span class="team__name"><%=matches[i].awayTeamName%></span>
+                    <img src="/images/<%=matches[i].awayTeamCode%>.png" alt="team logo" />
+                  </div>
+                  </form>
+              <!-- </li> -->
             <% } %>
-          <% } %>
-            </div>
-          </li>
+          <% } %>     
+          
       </ul>
     </div>
     <script src="/js/main.js"></script>

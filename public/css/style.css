@@ -58,23 +58,22 @@ ul {
   align-items: center;
 }
 
-/* .matches img {
-  width: 30px;
-} */
-
 .match__title {
   display: flex;
   justify-content: center;
 }
-
+.match__day {
+  width: 300px;
+  text-align: center;
+}
 .left__team {
   display: flex;
-  width: 200px;
+  width: 300px;
 }
 
 .right__team {
   display: flex;
-  width: 200px;
+  width: 300px;
   justify-content: flex-end;
 }
 
