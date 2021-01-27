@@ -13,13 +13,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  date: {
-    type: Date,
-    require: Date.now,
-  },
   point: {
     type: Number,
     required: true,
+  },
+  date: {
+    type: Date,
+    require: Date.now,
   },
   subscribe: {
     type: [String],

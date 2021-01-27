@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('passport');
+const flash = require('connect-flash');
 
 const app = express();
 
@@ -35,6 +36,17 @@ app.set('view engine', 'ejs');
 
 //connect db
 connectDB();
+
+// Connect flash
+app.use(flash());
+
+// Global Vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // Body parser
 app.use(express.json());
