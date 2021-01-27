@@ -8,6 +8,7 @@
 }
 * {
   padding: 0;
+  margin: 0;
 }
 header {
   display: flex;
@@ -69,12 +70,15 @@ ul {
 .left__team {
   display: flex;
   width: 300px;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .right__team {
   display: flex;
   width: 300px;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .vs {
@@ -85,4 +89,10 @@ ul {
   display: flex;
   justify-content: space-between;
   padding: var(--pading);
+}
+
+.match__radioBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

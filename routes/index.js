@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
   try {
     // const today = helper.formatDate(new Date('2021-01-21'));
     const today = helper.formatDateToMonth(new Date());
-
     const matches = await Match.find({
       gameStartDate: { $regex: new RegExp(`^${today}`) },
     });
@@ -53,6 +52,26 @@ router.get('/change-month', async (req, res) => {
     console.log(err);
     res.render('error/500');
   }
+});
+
+router.post('/vote', async (req, res) => {
+  console.log(Object.keys(req.body));
+  const body = req.body;
+  ids = Object.keys(body);
+  ids.forEach(async (id) => {
+    const voteTo = `${body[id]}TeamVotes`;
+    const query = {};
+    query[voteTo] = 1; //쿼리를 이런식으로 작성해야됨 바로 오브젝트{}에서 작성 불가
+    console.log(query);
+    const match = await Match.findByIdAndUpdate(id, {
+      $inc: query, //$inc 증가시키는 것
+    })
+      .exec()
+      .then((match) => {
+        console.log(`match: ${match}`);
+      });
+  });
+  res.send('/');
 });
 
 module.exports = router;

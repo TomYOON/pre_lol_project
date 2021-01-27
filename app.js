@@ -21,8 +21,8 @@ app.set('view engine', 'ejs');
 connectDB();
 
 // Body parser
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Route
 app.use('/', require('./routes/index'));

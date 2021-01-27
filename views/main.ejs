@@ -41,11 +41,13 @@
           <h1>이번달엔 경기가 없습니다.</h1>
           <a href="/">돌아가기</a>
           <%} else {%>
+            <form method="post" action='/vote' name="voteSubmit" target="/">
+
             <% for (let i = 0; i < matches.length; i++) { %>
-              <!-- <li class="match__list"> -->
-                <form method="post" class="match__list" action='/'>
+              <li class="match__list">
                   <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
                   <div class="left__team">
+                  <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='home' class="match__ladioBtn"/>
                     <img src="/images/<%=matches[i].homeTeamCode%>.png" alt="team logo" />
                     <span class="team__name"><%=matches[i].homeTeamName%></span>
                   </div>
@@ -53,10 +55,13 @@
                   <div class="right__team">
                     <span class="team__name"><%=matches[i].awayTeamName%></span>
                     <img src="/images/<%=matches[i].awayTeamCode%>.png" alt="team logo" />
+                    <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='away' class="match__ladioBtn"/>
                   </div>
-                  </form>
-              <!-- </li> -->
+                  
+              </li>
             <% } %>
+            <input type="button" value="투표하기" class="voteSubmit__btn"/>
+            </form>  
           <% } %>     
           
       </ul>

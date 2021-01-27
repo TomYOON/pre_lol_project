@@ -2,20 +2,23 @@
 let curDay = new Date();
 const matchList = document.querySelectorAll('.match__list');
 const matchPerDay = 2;
+
 //Selectors
-const rightButton = document.querySelector('.right__button');
-const leftButton = document.querySelector('.left__button');
+const rightBtn = document.querySelector('.right__button');
+const leftBtn = document.querySelector('.left__button');
 const matchDay = document.querySelector('.match__day');
+const voteBtn = document.querySelector('.voteSubmit__btn');
 
 document.addEventListener('DOMContentLoaded', () => {
   getMatch();
 });
-rightButton.addEventListener('click', () => {
+rightBtn.addEventListener('click', () => {
   addDay(1);
 });
-leftButton.addEventListener('click', () => {
+leftBtn.addEventListener('click', () => {
   addDay(-1);
 });
+voteBtn.addEventListener('click', voteSubmit);
 
 function formatDate(date) {
   return date.toISOString().substring(0, 10);
@@ -66,11 +69,15 @@ function addDay(day) {
 }
 
 function getNextMonth() {
-  console.log(12345);
   var form = document.changeMonth;
   var formDate = form.date;
   const date = new Date();
   date.setMonth(date.getMonth() + 1);
   formDate.value = curDay.toString();
+  form.submit();
+}
+
+function voteSubmit() {
+  var form = document.voteSubmit;
   form.submit();
 }
