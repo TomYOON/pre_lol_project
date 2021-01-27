@@ -9,13 +9,16 @@
 * {
   padding: 0;
   margin: 0;
+  text-align: center;
 }
 header {
   display: flex;
   justify-content: center;
   padding: 5px;
+  width: 100%;
   background-color: var(--background-color);
 }
+
 body {
   margin: 0;
   font-family: 'Source Sans Pro';
@@ -95,4 +98,8 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.votes {
+  padding: 0 10px;
 }

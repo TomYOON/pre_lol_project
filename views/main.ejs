@@ -1,74 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="https://kit.fontawesome.com/d7383f5e9e.js"
-      crossorigin="anonymous"
-    ></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/style.css" />
-    <title>pre lol</title>
-  </head>
-  <header>
-    <a class="title" href='/'>PREPRO</a>
-  </header>
-  <div class="navbar">
-    <ul class="navbar__menu">
-      <li>랭킹</li>
-      <li>자유게시판</li>
-      <li>분석</li>
-      <li>My</li>
-    </ul>
+
+<div class="matches">
+  <div class="match__title">
+    <button class="left__button"><i class="fas fa-chevron-left"></i></button>
+    <span class="match__day">Today's match</span>
+    <button class="right__button"><i class="fas fa-chevron-right"></i></button>
+    <form method="GET" action="/change-month" hidden name="changeMonth">
+      <input type="text" name="date" id="date">
+    </form>
   </div>
+  <ul>
+    <% if (isEmpty) {%>
+      <h1>이번달엔 경기가 없습니다.</h1>
+      <a href="/">돌아가기</a>
+      <%} else {%>
+        <form method="post" action='/vote' name="voteSubmit" class="vote__form">
 
-  <body>
-    <div class="matches">
-      <div class="match__title">
-        <button class="left__button"><i class="fas fa-chevron-left"></i></button>
-        <span class="match__day">Today's match</span>
-        <button class="right__button"><i class="fas fa-chevron-right"></i></button>
-        <form method="GET" action="/change-month" hidden name="changeMonth">
-          <input type="text" name="date" id="date">
-        </form>
-      </div>
-      <ul>
-        <% if (isEmpty) {%>
-          <h1>이번달엔 경기가 없습니다.</h1>
-          <a href="/">돌아가기</a>
-          <%} else {%>
-            <form method="post" action='/vote' name="voteSubmit" target="/" class="vote__form">
+        <% for (let i = 0; i < matches.length; i++) { %>
+          <li class="match__list">
+              <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
+              <div class="left__team">
+              <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='home' class="match__ladioBtn"/>
+                <img src="/images/<%=matches[i].homeTeamCode%>.png" alt="team logo" />
+                <span class="team__name"><%=matches[i].homeTeamName%></span>
+                <span class="votes"><%=matches[i].homeTeamVotes%></span>
+              </div>
+              <span class="vs">VS</span>
+              <div class="right__team">
+                <span class="votes"><%=matches[i].awayTeamVotes%></span>
+                <span class="team__name"><%=matches[i].awayTeamName%></span>
+                <img src="/images/<%=matches[i].awayTeamCode%>.png" alt="team logo" />
+                <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='away' class="match__ladioBtn"/>
+              </div>
 
-            <% for (let i = 0; i < matches.length; i++) { %>
-              <li class="match__list">
-                  <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
-                  <div class="left__team">
-                  <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='home' class="match__ladioBtn"/>
-                    <img src="/images/<%=matches[i].homeTeamCode%>.png" alt="team logo" />
-                    <span class="team__name"><%=matches[i].homeTeamName%></span>
-                  </div>
-                  <span class="vs">VS</span>
-                  <div class="right__team">
-                    <span class="team__name"><%=matches[i].awayTeamName%></span>
-                    <img src="/images/<%=matches[i].awayTeamCode%>.png" alt="team logo" />
-                    <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='away' class="match__ladioBtn"/>
-                  </div>
-                  
-              </li>
-            <% } %>
-            <input type="button" value="투표하기" class="voteSubmit__btn"/>
-            <% if (errorMsg != '') {%>
-              <span><%=errorMsg%></span>
-              <%}%>
-            </form>  
-          <% } %>     
-          
-      </ul>
-    </div>
-    <script src="/js/main.js"></script>
-  </body>
-</html>
+          </li>
+
+        <% } %>
+        <input type="button" value="투표하기" class="voteSubmit__btn"/>
+        <% if (errorMsg != '') {%>
+          <span><%=errorMsg%></span>
+          <%}%>
+        </form>  
+      <% } %>     
+      
+  </ul>
+</div>
+

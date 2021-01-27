@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Match = require('../models/Match');
 const helper = require('../helper/helper');
+const { ensureAuthenticated } = require('../config/auth');
 
 // @desc Login/Landing page
 // @route GET /
@@ -89,7 +90,6 @@ router.post('/vote', async (req, res) => {
     const voteTo = `${body[id]}TeamVotes`;
     const query = {};
     query[voteTo] = 1; //쿼리를 이런식으로 작성해야됨 바로 오브젝트{}에서 작성 불가
-    console.log(query);
     const match = await Match.findByIdAndUpdate(id, {
       $inc: query, //$inc 증가시키는 것
     })
@@ -102,7 +102,27 @@ router.post('/vote', async (req, res) => {
         }
       });
   });
-  res.send('/');
+
+  try {
+    const today = helper.formatDateToMonth(new Date());
+    const errorMsg = '';
+    const matches = await Match.find({
+      gameStartDate: { $regex: new RegExp(`^${today}`) },
+    });
+    let isEmpty = false;
+    if (matches.length == 0) {
+      isEmpty = true;
+    }
+
+    res.render('main', {
+      matches,
+      isEmpty,
+      errorMsg,
+    });
+  } catch (err) {
+    console.log(err);
+    res.render('error/500');
+  }
 });
 
 module.exports = router;

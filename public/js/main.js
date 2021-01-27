@@ -79,6 +79,5 @@ function getNextMonth() {
 
 function voteSubmit() {
   var form = document.voteSubmit;
-  console.log(form.test);
   form.submit();
 }

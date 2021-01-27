@@ -2,8 +2,23 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
+const passport = require('passport');
 
 const app = express();
+
+// Passprot config
+require('./config/passport')(passport);
+
+// Express Session
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 // Load config
 dotenv.config({ path: './config/.env' });
@@ -14,7 +29,8 @@ app.set('views', __dirname + '/views');
 //set static path
 app.use(express.static(__dirname + '/public'));
 
-// 화면 engine을 ejs로 설정
+//EJS
+app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
 //connect db
@@ -26,6 +42,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Route
 app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
 const PORT = process.env.PORT || 5000; //앞에 포트가 안될 경우 5000
 
