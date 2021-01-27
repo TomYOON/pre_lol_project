@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
   try {
     // const today = helper.formatDate(new Date('2021-01-21'));
     const today = helper.formatDateToMonth(new Date());
+    const errorMsg = '';
     const matches = await Match.find({
       gameStartDate: { $regex: new RegExp(`^${today}`) },
     });
@@ -22,6 +23,7 @@ router.get('/', async (req, res) => {
     res.render('main', {
       matches,
       isEmpty,
+      errorMsg,
     });
   } catch (err) {
     console.log(err);
@@ -58,6 +60,31 @@ router.post('/vote', async (req, res) => {
   console.log(Object.keys(req.body));
   const body = req.body;
   ids = Object.keys(body);
+  if (ids.length == 0) {
+    //서버 안거치고 js로 차단하고 싶은데 아직 방법을 못찾음
+    try {
+      const today = helper.formatDateToMonth(new Date());
+      const errorMsg = '한 개 이상 선택해야 합니다.';
+      const matches = await Match.find({
+        gameStartDate: { $regex: new RegExp(`^${today}`) },
+      });
+      let isEmpty = false;
+      console.log(matches);
+      if (matches.length == 0) {
+        isEmpty = true;
+      }
+
+      res.render('main', {
+        matches,
+        isEmpty,
+        errorMsg,
+      });
+    } catch (err) {
+      console.log(err);
+      res.render('error/500');
+    }
+    return;
+  }
   ids.forEach(async (id) => {
     const voteTo = `${body[id]}TeamVotes`;
     const query = {};
@@ -67,8 +94,12 @@ router.post('/vote', async (req, res) => {
       $inc: query, //$inc 증가시키는 것
     })
       .exec()
-      .then((match) => {
+      .then((match, err) => {
         console.log(`match: ${match}`);
+        if (err) {
+          req.render('error/500');
+          return;
+        }
       });
   });
   res.send('/');
