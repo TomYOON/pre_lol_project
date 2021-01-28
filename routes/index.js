@@ -27,14 +27,13 @@ function mapMatchVote(matches, votes) {
   // console.log(`length: ${voteIdx}, ${votes.length}`);
   return mapedArr;
 }
-// @desc Login/Landing page
+
+// @desc root/Landing page
 // @route GET /
 router.get('/', async (req, res) => {
   console.log(req.isAuthenticated());
   try {
-    // const today = helper.formatDate(new Date('2021-01-21'));
     const today = helper.formatDateToMonth(new Date());
-    // const errorMsg = '';
     let matches = await Match.find({
       gameStartDate: { $regex: new RegExp(`^${today}`) },
     }).sort({ _id: 1 });
@@ -43,7 +42,6 @@ router.get('/', async (req, res) => {
       const userVotes = await Vote.find({
         userId: req.user.id,
       }).sort({ matchId: 1 });
-      // console.log(mapMatchVote(matches, userVotes));
       matches = mapMatchVote(matches, userVotes);
     }
     let isEmpty = false;
@@ -55,7 +53,6 @@ router.get('/', async (req, res) => {
     res.render('main', {
       matches,
       isEmpty,
-      // errorMsg,
     });
   } catch (err) {
     console.log(err);
@@ -88,6 +85,8 @@ router.get('/change-month', async (req, res) => {
   }
 });
 
+// @desc vote to selected team
+// @route POST /vote
 router.post('/vote', ensureAuthenticated, async (req, res) => {
   try {
     console.log(Object.keys(req.body));
@@ -130,8 +129,9 @@ router.post('/vote', ensureAuthenticated, async (req, res) => {
         userId: userId,
         matchId: id,
       });
-      // 이미 유저가 그 매치에 대해 투표했을 경우
+
       if (vote) {
+        // 이미 유저가 그 매치에 대해 투표했을 경우
         console.log(vote);
         continue;
       } else {
@@ -155,12 +155,6 @@ router.post('/vote', ensureAuthenticated, async (req, res) => {
           }
         });
     }
-  } catch (err) {
-    console.log(err);
-    res.render('error/500');
-  }
-
-  try {
     res.redirect(`/`);
   } catch (err) {
     console.log(err);
