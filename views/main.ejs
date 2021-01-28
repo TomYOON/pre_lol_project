@@ -17,6 +17,7 @@
 
         <% for (let i = 0; i < matches.length; i++) { %>
           <li class="match__list">
+            <span class="user__vote" hidden><%=matches[i].userVote%></span>
               <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
               <div class="left__team">
               <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='home' class="match__ladioBtn"/>
@@ -36,7 +37,7 @@
 
         <% } %>
         <input type="button" value="투표하기" class="voteSubmit__btn"/>
-        <% if (errorMsg != '') {%>
+        <% if(typeof errorMsg != 'undefined') {%>
           <span><%=errorMsg%></span>
           <%}%>
         </form>  

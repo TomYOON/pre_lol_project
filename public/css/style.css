@@ -103,3 +103,7 @@ ul {
 .votes {
   padding: 0 10px;
 }
+
+.voted {
+  background-color: #d49466;
+}

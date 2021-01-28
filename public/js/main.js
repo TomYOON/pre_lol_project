@@ -33,6 +33,7 @@ function getMatch(day = 1) {
     matchList.forEach((match) => {
       const formattedDay = formatDate(curDay);
       const date = match.querySelector('.match__date');
+      const userVote = match.querySelector('.user__vote');
       if (date.textContent === formattedDay) {
         match.style.display = 'flex';
         hasMatch = true;
@@ -44,6 +45,14 @@ function getMatch(day = 1) {
       } else {
         match.style.display = 'none';
       }
+      if (userVote.textContent === 'home') {
+        const homeTeam = match.querySelector('.left__team');
+        homeTeam.classList.add('voted'); //css class 추가
+      } else if (userVote.textContent === 'away') {
+        const awayTeam = match.querySelector('.right__team');
+        awayTeam.classList.add('voted'); //css class 추가
+      }
+
       index++;
     });
 
