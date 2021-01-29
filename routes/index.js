@@ -162,4 +162,7 @@ router.post('/vote', ensureAuthenticated, async (req, res) => {
   }
 });
 
+router.get('/test', async (req, res) => {
+  res.send('test');
+});
 module.exports = router;

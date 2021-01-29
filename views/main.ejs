@@ -8,7 +8,7 @@
       <input type="text" name="date" id="date">
     </form>
   </div>
-  <ul>
+  <div>
     <% if (isEmpty) {%>
       <h1>이번달엔 경기가 없습니다.</h1>
       <a href="/">돌아가기</a>
@@ -42,8 +42,7 @@
           <span><%=errorMsg%></span>
           <%}%>
         </form>  
-      <% } %>     
-      
-  </ul>
+      <% } %>   
+    </div>  
 </div>
 
