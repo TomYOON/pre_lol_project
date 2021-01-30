@@ -43,12 +43,14 @@ function mapMatchVote(matches, votes) {
 // @route GET /
 router.get('/test2', async (req, res) => {
   console.log(req.isAuthenticated());
+  console.log(req.query, '123');
+  const reqDate = new Date(req.query.date);
   // console.log(moment().endOf('week').toDate());
   try {
-    const dateObj = helper.getThisWeek();
+    const dateObj = helper.getThisWeek(reqDate);
     const startDate = helper.formatDate(dateObj.startDate);
     const endDate = helper.formatDate(dateObj.endDate);
-    console.log(startDate, endDate);
+    // console.log(startDate, endDate);
     let matches = await Match.find({
       gameStartDate: { $gte: startDate, $lte: endDate },
     }).sort({ _id: 1 });
@@ -61,7 +63,6 @@ router.get('/test2', async (req, res) => {
     } else {
       matches = mapMatchVote(matches, ['0']);
     }
-    console.log(matches);
     let isEmpty = false;
 
     if (matches.length == 0) {

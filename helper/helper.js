@@ -6,9 +6,8 @@ module.exports = {
     return date.toISOString().substring(0, 7);
   },
 
-  getThisWeek: function () {
+  getThisWeek: function (curr = new Date()) {
     // 수~일까지
-    var curr = new Date(); // get current date
     var first = curr.getDate() - curr.getDay() + 3; // First day is the day of the month - the day of the week
     // first.getDate()
 
