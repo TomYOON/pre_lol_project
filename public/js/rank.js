@@ -4,6 +4,7 @@ const testBtn = document.querySelector('.test');
 const container = document.querySelector('.vote__container');
 const rightBtn2 = document.querySelector('.right__button');
 const leftBtn2 = document.querySelector('.left__button');
+// const matchDay2 = document.querySelector('.match__day');
 
 //event
 testBtn.addEventListener('click', () => {
@@ -37,6 +38,7 @@ function biuldMatchHtml(match) {
   </div>`;
   return htmlString;
 }
+
 function testFetch(date, next = true) {
   fetch(`/rank/test2?date=${formatDate(date)}`)
     .then((res) => res.json())
@@ -45,6 +47,11 @@ function testFetch(date, next = true) {
         const span = document.createElement('span');
         span.innerHTML = '경기가 없습니다.';
         container.appendChild(span);
+        if (next) {
+          rightBtn2.disabled = true;
+        } else {
+          leftBtn2.disabled = true;
+        }
         return;
       }
       if (matches.length == 0) {
@@ -110,11 +117,12 @@ function getNextMatch() {
   }
 
   container.innerHTML = '';
-
+  leftBtn2.disabled = false;
   for (let i = 0; i < 2; i++) {
     const matchLi = document.createElement('li');
     matchLi.classList.add('match__list');
     const match = matches[++curIdx];
+    matchDay.innerHTML = match.gameStartDate;
     const htmlString = biuldMatchHtml(match);
     matchLi.innerHTML = htmlString;
     container.appendChild(matchLi);
@@ -128,13 +136,14 @@ function getPrevMatch() {
     testFetch(date, false);
     return;
   }
+  rightBtn2.disabled = false;
   container.innerHTML = '';
   curIdx -= 4;
-
   for (let i = 0; i < 2; i++) {
     const matchLi = document.createElement('li');
     matchLi.classList.add('match__list');
     const match = matches[++curIdx];
+    matchDay.innerHTML = match.gameStartDate;
     const htmlString = biuldMatchHtml(match);
     matchLi.innerHTML = htmlString;
     container.appendChild(matchLi);
