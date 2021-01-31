@@ -12,11 +12,6 @@ router.get('/', async (req, res) => {
   res.render('rank');
 });
 
-router.get('/test', async (req, res) => {
-  console.log(req.isAuthenticated());
-  res.send({ test: '123' });
-});
-
 function mapMatchVote(matches, votes) {
   // if (matches.length == 0) {
   //   return matches;
@@ -43,7 +38,7 @@ function mapMatchVote(matches, votes) {
 // @route GET /
 router.get('/test2', async (req, res) => {
   console.log(req.isAuthenticated());
-  console.log(req.query, '123');
+  // console.log(req.query, '123');
   const reqDate = new Date(req.query.date);
   // console.log(moment().endOf('week').toDate());
   try {

@@ -7,27 +7,39 @@ module.exports = {
   },
 
   getThisWeek: function (curr = new Date()) {
-    // 수~일까지
-    var first = curr.getDate() - curr.getDay() + 3; // First day is the day of the month - the day of the week
-    // first.getDate()
-
-    var firstday = new Date(curr.setDate(first));
-    var lastday = new Date(curr.setDate(firstday.getDate() + 4));
+    const today = (curr.getDay() + 6) % 7; //월요일부터 시작 월 = 0, 일 = 6
+    let first = curr.getDate() - today; // First day is the day of the month - the day of the week
+    // console.log(`first: ${first}`, curr.getDay());
+    let firstday = new Date(curr.setDate(first));
+    let lastday = new Date(curr.setDate(firstday.getDate() + 6));
     return { startDate: firstday, endDate: lastday };
   },
-  // mapTeamCode: function (teamName) {
-  //   const team_map = {
-  //     DRX: 'drx',
-  //     KT: 'kt',
-  //     T1: 't1',
-  //     농심: 'nongsim',
-  //     '담원 기아': 'dk',
-  //     '리브 샌박': 'liv',
-  //     아프리카: 'afreeca',
-  //     젠지: 'geng',
-  //     프레딧: 'predit',
-  //     한화생명: 'hanwha',
-  //   };
-  //   return team_map[teamName];
-  // },
+
+  mapMatchVote: function (matches, votes) {
+    let voteIdx = 0;
+    let matchIdx = 0;
+    let mapedArr = [];
+    while (matchIdx < matches.length) {
+      const obj = matches[matchIdx].toObject();
+      obj['userVote'] = '';
+      if (!(voteIdx < votes.length)) {
+        mapedArr.push(obj);
+        matchIdx++;
+        continue;
+      }
+
+      if (obj._id == votes[voteIdx].matchId) {
+        obj['userVote'] = votes[voteIdx].voteTo;
+        voteIdx++;
+        matchIdx++;
+      } else if (obj._id > votes[voteIdx].matchId) {
+        voteIdx++;
+      } else {
+        matchIdx++;
+      }
+      mapedArr.push(obj);
+    }
+    console.log(`voteIdx: ${voteIdx},`, votes);
+    return mapedArr;
+  },
 };

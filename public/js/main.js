@@ -1,92 +1,167 @@
-//global variable
-let curDay = new Date();
-const matchList = document.querySelectorAll('.match__list');
-const matchPerDay = 2;
-
-//Selectors
+//query selector
+const outputDiv = document.querySelector('.output');
+const container = document.querySelector('.vote__container');
 const rightBtn = document.querySelector('.right__button');
 const leftBtn = document.querySelector('.left__button');
 const matchDay = document.querySelector('.match__day');
 const voteBtn = document.querySelector('.voteSubmit__btn');
 
+//event
 document.addEventListener('DOMContentLoaded', () => {
-  getMatch();
+  fetchMatch(new Date());
 });
-rightBtn.addEventListener('click', () => {
-  addDay(1);
-});
-leftBtn.addEventListener('click', () => {
-  addDay(-1);
-});
-voteBtn.addEventListener('click', voteSubmit);
+rightBtn.addEventListener('click', getNextMatch);
+leftBtn.addEventListener('click', getPrevMatch);
+voteBtn.addEventListener('click', submitVote);
 
-function formatDate(date) {
-  return date.toISOString().substring(0, 10);
+//global variable
+let matches = [];
+let curIdx = 0;
+let matchPerDay = 2;
+
+function buildVoteForm(htmlStr) {
+  return `<form method="post" action='/vote' name="voteSubmit" class="vote__form">
+  ${htmlStr}
+  <input type="button" value="투표하기" class="voteSubmit__btn"/>`;
 }
 
-function getMatch(day = 1) {
-  let index = 0;
-  let count = 0;
-  hasMatch = false;
-  while (matchList.length > 0 && !hasMatch) {
-    //매치가 있는데 오늘 매치가 없으면 다음매치까지 찾음
-    matchList.forEach((match) => {
-      const formattedDay = formatDate(curDay);
-      const date = match.querySelector('.match__date');
-      const userVote = match.querySelector('.user__vote');
-      if (date.textContent === formattedDay) {
-        match.style.display = 'flex';
-        hasMatch = true;
-        if (date.textContent === formatDate(new Date())) {
-          matchDay.innerHTML = '오늘의 경기';
+function biuldMatchHtml(match) {
+  const htmlString = `
+  <div class="left__team ${match.userVote == 'home' ? 'voted' : ''}">
+  <input type="radio" name=${
+    match._id
+  } id="vote__input" value='home' class="match__ladioBtn"/>
+    <img src="/images/${match.homeTeamCode}.png" alt="team logo" />
+    <span class="team__name">${match.homeTeamName}</span>
+    <span class="votes">${match.homeTeamVotes}</span>
+  </div>
+  <span class="vs">VS</span>
+  <div class="right__team ${match.userVote == 'away' ? 'voted' : ''}">
+    <span class="votes">${match.awayTeamVotes}</span>
+    <span class="team__name">${match.awayTeamName}</span>
+    <img src="/images/${match.awayTeamCode}.png" alt="team logo" />
+    <input type="radio" name=${
+      match._id
+    } id="vote__input" value='away' class="match__ladioBtn"/>
+  </div>
+  `;
+  return htmlString;
+}
+
+function fetchMatch(date, next = true) {
+  fetch(`/match?date=${formatDate(date)}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.length < 1) {
+        const span = document.createElement('span');
+        span.innerHTML = '경기가 없습니다.';
+        container.appendChild(span);
+        if (next) {
+          rightBtn.disabled = true;
         } else {
-          matchDay.innerHTML = formattedDay;
+          leftBtn.disabled = true;
         }
+        return;
+      }
+      if (matches.length == 0) {
+        //첫 로드일 때
+        Array.prototype.push.apply(matches, data);
+        viewTodayMatch(new Date());
       } else {
-        match.style.display = 'none';
+        if (next) {
+          Array.prototype.push.apply(matches, data);
+          getNextMatch();
+        } else {
+          curIdx = data.length + 1;
+          Array.prototype.push.apply(data, matches);
+          matches = data;
+          getPrevMatch();
+          console.log(matches, curIdx);
+        }
       }
-      if (userVote.textContent === 'home') {
-        const homeTeam = match.querySelector('.left__team');
-        homeTeam.classList.add('voted'); //css class 추가
-      } else if (userVote.textContent === 'away') {
-        const awayTeam = match.querySelector('.right__team');
-        awayTeam.classList.add('voted'); //css class 추가
-      }
-
-      index++;
     });
+}
 
-    if (!hasMatch) {
-      curDay.setDate(curDay.getDate() + day); //day++
-      index = 0;
-    }
-    if (count > 15) {
-      if (!hasMatch) {
-        getNextMonth();
+function formatDate(date) {
+  if (typeof date == typeof new Date()) {
+    return date.toISOString().substring(0, 10);
+  }
+  return date.substring(0, 10);
+}
+
+function viewTodayMatch(date) {
+  const curDate = formatDate(date);
+  let matchOfDayCount = 0;
+  for (const match of matches) {
+    console.log(curDate, match.gameStartDate);
+    if (match.gameStartDate === curDate) {
+      const matchLi = document.createElement('li');
+      matchLi.classList.add('match__list');
+
+      const htmlString = biuldMatchHtml(match);
+
+      matchLi.innerHTML = htmlString;
+      container.appendChild(matchLi);
+      if (++matchOfDayCount == matchPerDay) {
+        break;
       }
-      break;
     }
-    count++;
+    curIdx++;
+    console.log(curIdx);
+  }
+
+  if (matchOfDayCount == 0) {
+    //오늘 매치가 없을 경우
+    curIdx = -1;
+    getNextMatch();
   }
 }
 
-function addDay(day) {
-  let month = curDay.getMonth();
-  curDay.setDate(curDay.getDate() + day);
+function getNextMatch() {
+  if (matches.length < curIdx + matchPerDay) {
+    let date = new Date(matches[matches.length - 1].gameStartDate);
+    date.setDate(date.getDate() + 7); //다음주
 
-  getMatch(day);
+    fetchMatch(date);
+    return;
+  }
+
+  container.innerHTML = '';
+  leftBtn.disabled = false;
+  for (let i = 0; i < matchPerDay; i++) {
+    const matchLi = document.createElement('li');
+    matchLi.classList.add('match__list');
+    const match = matches[++curIdx];
+    matchDay.innerHTML = match.gameStartDate;
+    const htmlString = biuldMatchHtml(match);
+    matchLi.innerHTML = htmlString;
+    container.appendChild(matchLi);
+  }
 }
 
-function getNextMonth() {
-  var form = document.changeMonth;
-  var formDate = form.date;
-  const date = new Date();
-  date.setMonth(date.getMonth() + 1);
-  formDate.value = curDay.toString();
-  form.submit();
+function getPrevMatch() {
+  const minusIdx = matchPerDay * 2; //현재 인덱스에서 하루 매치의 2배를 뒤로가서 ++하는 방식으로 보여줌
+  if (curIdx - minusIdx < 0) {
+    let date = new Date(matches[0].gameStartDate);
+    date.setDate(date.getDate() - 7);
+    fetchMatch(date, false);
+    return;
+  }
+  rightBtn.disabled = false;
+  container.innerHTML = '';
+  curIdx -= minusIdx;
+  for (let i = 0; i < matchPerDay; i++) {
+    const matchLi = document.createElement('li');
+    matchLi.classList.add('match__list');
+    const match = matches[++curIdx];
+    matchDay.innerHTML = match.gameStartDate;
+    const htmlString = biuldMatchHtml(match);
+    matchLi.innerHTML = htmlString;
+    container.appendChild(matchLi);
+  }
 }
 
-function voteSubmit() {
-  var form = document.voteSubmit;
-  form.submit();
+function submitVote(event) {
+  // event.preventDefault();
+  console.log('sdf');
 }
