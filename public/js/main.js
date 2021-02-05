@@ -5,24 +5,22 @@ const rightBtn = document.querySelector('.right__button');
 const leftBtn = document.querySelector('.left__button');
 const matchDay = document.querySelector('.match__day');
 const voteBtn = document.querySelector('.voteSubmit__btn');
+const alertSpan = document.querySelector('.alert__msg');
 
 //event
 // document.addEventListener('DOMContentLoaded', () => {
 //   fetchMatch(new Date());
 // });
-// rightBtn.addEventListener('click', getNextMatch);
-// leftBtn.addEventListener('click', getPrevMatch);
+rightBtn.addEventListener('click', getNextMatch);
+leftBtn.addEventListener('click', getPrevMatch);
 // voteBtn.addEventListener('click', submitVote);
 
 //global variable
 let matches = [];
 let curIdx = 0;
 let matchPerDay = 2;
-let curDate = new Date();
-const today = new Date();
 
 function test(match) {
-  console.log(match);
   matches.push(mapMatchDay(match));
   viewThisWeekMatch();
 }
@@ -58,24 +56,25 @@ function biuldMatchHtml(match) {
   return htmlString;
 }
 
-function fetchMatch(date, next = true) {
-  fetch(`/match?date=${formatDate(date)}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.length < 1) {
-        const span = document.createElement('span');
-        span.innerHTML = '경기가 없습니다.';
-        container.appendChild(span);
-        return;
-      }
-      matches.push(data);
-      viewThisWeekMatch();
-    });
+async function fetchMatch(date) {
+  console.log(date);
+  const data = await fetch(`/match?date=${formatDate(date)}`).then((res) =>
+    res.json()
+  );
+  return data;
 }
 
 function mapMatchDay(matches) {
   if (matches.length < 1) return;
-  matches.sort((a, b) => (a.gameStartDate > b.gameStartDate ? 1 : -1));
+  matches.sort((a, b) =>
+    a.gameStartDate > b.gameStartDate
+      ? 1
+      : a.gameStartDate === b.gameStartDate
+      ? a.gameStartTime > b.gameStartTime
+        ? 1
+        : -1
+      : -1
+  );
   let curDate = matches[0].gameStartDate;
   let ret = [];
   let dateArr = [];
@@ -92,18 +91,62 @@ function mapMatchDay(matches) {
   return ret;
 }
 
+async function getNextMatch() {
+  leftBtn.disabled = false;
+  alertSpan.innerHTML = '';
+  console.log(matches[curIdx][0][0].gameStartDate);
+  if (curIdx === matches.length - 1) {
+    const curDate = new Date(matches[curIdx][0][0].gameStartDate);
+    curDate.setDate(curDate.getDate() + 7);
+    console.log(123, curDate);
+    const matchArr = await fetchMatch(curDate);
+    if (matchArr.length > 0) {
+      matches.push(mapMatchDay(matchArr));
+      curIdx++;
+    } else {
+      alertSpan.innerHTML = '경기가 없습니다.';
+      rightBtn.disabled = true;
+    }
+  } else {
+    curIdx++;
+  }
+  viewThisWeekMatch();
+}
+
+async function getPrevMatch() {
+  alertSpan.innerHTML = '';
+  rightBtn.disabled = false;
+  console.log(matches[curIdx][0][0].gameStartDate);
+  if (curIdx === 0) {
+    const curDate = new Date(matches[curIdx][0][0].gameStartDate);
+    curDate.setDate(curDate.getDate() - 7);
+    console.log(123, curDate);
+    const matchArr = await fetchMatch(curDate);
+    if (matchArr.length > 0) {
+      // matches.push(mapMatchDay(matchArr));
+      matches.splice(0, 0, mapMatchDay(matchArr));
+    } else {
+      alertSpan.innerHTML = '경기가 없습니다.';
+      leftBtn.disabled = true;
+    }
+  } else {
+    curIdx--;
+  }
+  viewThisWeekMatch();
+}
 function dateValidCheck(matchDate, matchTime) {
   const today = new Date();
   const date = formatDate(today);
-  const hour = today.getHours();
+  const curHour = today.getHours();
   let ret = true;
   if (matchDate < date) {
     ret = false;
   } else if (matchDate == date) {
-    if (parseInt(matchTime.substring(0, 2)) <= hour) {
+    if (parseInt(matchTime.substring(0, 2)) <= curHour) {
       ret = false;
     }
   }
+
   return ret;
 }
 
@@ -114,6 +157,8 @@ function getDay(dateStr) {
   return dayArr[day];
 }
 function viewThisWeekMatch() {
+  container.innerHTML = '';
+
   const curMatches = matches[curIdx];
   for (const dayMappedMatch of curMatches) {
     const dateValid = dateValidCheck(
@@ -129,54 +174,20 @@ function viewThisWeekMatch() {
     )})`;
     matchDiv.appendChild(dateSpan);
 
-    if (!dateValid) {
-      matchDiv.classList.add('ended__match');
-    }
     for (const match of dayMappedMatch) {
       const matchLi = document.createElement('li');
       matchLi.classList.add('match__list');
+      if (!dateValidCheck(match.gameStartDate, match.gameStartTime)) {
+        matchLi.classList.add('ended__match');
+      }
 
       const htmlString = biuldMatchHtml(match);
-
       matchLi.innerHTML = htmlString;
       matchDiv.appendChild(matchLi);
     }
     container.appendChild(matchDiv);
   }
 }
-
-// function fetchMatch(date, next = true) {
-//   fetch(`/match?date=${formatDate(date)}`)
-//     .then((res) => res.json())
-//     .then((data) => {
-//       if (data.length < 1) {
-//         const span = document.createElement('span');
-//         span.innerHTML = '경기가 없습니다.';
-//         container.appendChild(span);
-//         if (next) {
-//           rightBtn.disabled = true;
-//         } else {
-//           leftBtn.disabled = true;
-//         }
-//         return;
-//       }
-//       if (matches.length == 0) {
-//         //첫 로드일 때
-//         Array.prototype.push.apply(matches, data);
-//         viewTodayMatch(new Date());
-//       } else {
-//         if (next) {
-//           Array.prototype.push.apply(matches, data);
-//           getNextMatch();
-//         } else {
-//           curIdx = data.length + 1;
-//           Array.prototype.push.apply(data, matches);
-//           matches = data;
-//           getPrevMatch();
-//         }
-//       }
-//     });
-// }
 
 function formatDate(date) {
   if (typeof date == typeof new Date()) {

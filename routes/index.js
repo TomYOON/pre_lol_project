@@ -64,17 +64,30 @@ router.get('/match', async (req, res) => {
     const dateObj = helper.getThisWeek(reqDate);
     const startDate = helper.formatDate(dateObj.startDate);
     const endDate = helper.formatDate(dateObj.endDate);
+    const firstMatch = '2021-01-13';
+    if (endDate < firstMatch) {
+      res.send([]);
+      return;
+    }
     // console.log(startDate, endDate);
     let matches = await Match.find({
-      gameStartDate: { $gte: startDate },
+      gameStartDate: { $gte: startDate, $lte: endDate },
     })
       .limit(matchOfWeekCount)
       .sort({ _id: 1 });
 
     if (matches.length == 0) {
-      res.send(matches);
-      return;
+      matches = await Match.find({
+        gameStartDate: { $gte: startDate },
+      })
+        .limit(matchOfWeekCount)
+        .sort({ _id: 1 });
+      if (matches.length == 0) {
+        res.send(matches);
+        return;
+      }
     }
+    console.log(matches);
 
     if (req.isAuthenticated()) {
       const userVotes = await Vote.find({
