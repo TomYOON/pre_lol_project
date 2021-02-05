@@ -18,6 +18,7 @@ const VoteSchema = new mongoose.Schema({
     require: true,
   },
   createdAt: { type: Date, default: Date.now },
+
   point: {
     type: Number,
     required: false,

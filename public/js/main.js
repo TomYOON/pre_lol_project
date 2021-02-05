@@ -37,23 +37,23 @@ function biuldMatchHtml(match) {
     ? ''
     : 'disabled';
   const htmlString = `
-  <div class="left__team ${match.userVote == 'home' ? 'voted' : ''}">
+  <label class="left__team ${match.userVote == 'home' ? 'voted' : ''}">
   <input type="radio" name=${
     match._id
   } id="vote__input" value='home' class="match__ladioBtn" ${dateValid}/>
     <img src="/images/${match.homeTeamCode}.png" alt="team logo" />
     <span class="team__name">${match.homeTeamName}</span>
     <span class="votes">${match.homeTeamVotes}표</span>
-  </div>
+  </label>
   <span class="vs">VS</span>
-  <div class="right__team ${match.userVote == 'away' ? 'voted' : ''}">
+  <label class="right__team ${match.userVote == 'away' ? 'voted' : ''}">
     <span class="votes">${match.awayTeamVotes}표</span>
     <span class="team__name">${match.awayTeamName}</span>
     <img src="/images/${match.awayTeamCode}.png" alt="team logo" />
     <input type="radio" name=${
       match._id
     } id="vote__input" value='away' class="match__ladioBtn" ${dateValid}/>
-  </div>
+  </label>
   `;
   return htmlString;
 }
@@ -107,6 +107,12 @@ function dateValidCheck(matchDate, matchTime) {
   return ret;
 }
 
+function getDay(dateStr) {
+  const date = new Date(dateStr);
+  const day = date.getDay();
+  const dayArr = ['일', '월', '화', '수', '목', '금', '토'];
+  return dayArr[day];
+}
 function viewThisWeekMatch() {
   const curMatches = matches[curIdx];
   for (const dayMappedMatch of curMatches) {
@@ -114,10 +120,13 @@ function viewThisWeekMatch() {
       dayMappedMatch[0].gameStartDate,
       dayMappedMatch[0].gameStartTime
     );
+
     const matchDiv = document.createElement('div');
     const dateSpan = document.createElement('span');
     matchDiv.classList.add('day__match');
-    dateSpan.innerHTML = dayMappedMatch[0].gameStartDate;
+    dateSpan.innerHTML = `${dayMappedMatch[0].gameStartDate} (${getDay(
+      dayMappedMatch[0].gameStartDate
+    )})`;
     matchDiv.appendChild(dateSpan);
 
     if (!dateValid) {
