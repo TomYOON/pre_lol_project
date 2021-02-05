@@ -9,8 +9,45 @@ const { ensureAuthenticated } = require('../config/auth');
 // @desc root/Landing page
 // @route GET /
 router.get('/', async (req, res) => {
+  const today = new Date();
+  const matchOfWeekCount = 10;
+
   try {
-    res.render('main');
+    const dateObj = helper.getThisWeek(today);
+    const startDate = helper.formatDate(dateObj.startDate);
+    const endDate = helper.formatDate(dateObj.endDate);
+    // console.log(startDate, endDate);
+    let matches = await Match.find({
+      gameStartDate: { $gte: startDate },
+    })
+      .limit(matchOfWeekCount)
+      .sort({ _id: 1 });
+
+    if (matches.length == 0) {
+      res.send(matches);
+      return;
+    }
+
+    if (req.isAuthenticated()) {
+      const userVotes = await Vote.find({
+        userId: req.user.id,
+        matchId: { $gte: matches[0]._id },
+      })
+        .limit(matchOfWeekCount)
+        .sort({ matchId: 1 });
+      matches = helper.mapMatchVote(matches, userVotes);
+    } else {
+      matches = helper.mapMatchVote(matches, ['0']);
+    }
+    let isEmpty = false;
+
+    if (matches.length == 0) {
+      isEmpty = true;
+    }
+
+    res.render('main', {
+      matches,
+    });
   } catch (err) {
     console.log(err);
     res.render('error/500');
