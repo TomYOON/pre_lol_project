@@ -39,7 +39,6 @@ module.exports = {
       }
       mapedArr.push(obj);
     }
-    console.log(`voteIdx: ${voteIdx},`, votes);
     return mapedArr;
   },
 };

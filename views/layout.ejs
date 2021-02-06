@@ -26,8 +26,16 @@
       <li><a href="/rank">랭킹</a></li>
       <li>자유게시판</li>
       <li>분석</li>
-      <li href=><a href="/users/login">My</a></li>
     </ul>
+    <div class="profile">
+    <%if (typeof userName == 'undefined' || userName === '') {%>
+    <a href="/users/login">로그인</a>
+    <%} else {%>
+      <a href="/users/login"><%=userName%>님</a>
+      <span><%=userPoint%> points</span>
+      <a href="users/logout">로그아웃</a>
+    <% }%>
+    </div>
   </div>
 
   <body>

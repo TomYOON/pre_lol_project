@@ -11,6 +11,8 @@ const { ensureAuthenticated } = require('../config/auth');
 router.get('/', async (req, res) => {
   const today = new Date();
   const matchOfWeekCount = 10;
+  let userName = '';
+  let userPoint = '';
 
   try {
     const dateObj = helper.getThisWeek(today);
@@ -29,6 +31,8 @@ router.get('/', async (req, res) => {
     }
 
     if (req.isAuthenticated()) {
+      userName = req.user.name;
+      userPoint = req.user.point;
       const userVotes = await Vote.find({
         userId: req.user.id,
         matchId: { $gte: matches[0]._id },
@@ -45,6 +49,8 @@ router.get('/', async (req, res) => {
 
     res.render('main', {
       matches,
+      userName,
+      userPoint,
     });
   } catch (err) {
     console.log(err);
@@ -87,7 +93,6 @@ router.get('/match', async (req, res) => {
         return;
       }
     }
-    console.log(matches);
 
     if (req.isAuthenticated()) {
       //로그인 되어있으면 투표한 데이터를 넘겨줌
@@ -117,7 +122,6 @@ router.get('/match', async (req, res) => {
 // @desc vote to selected team
 // @route POST /vote
 router.post('/vote', async (req, res) => {
-  console.log(req);
   if (!req.isAuthenticated()) {
     res.send({ status: 'login' });
     return;
@@ -128,7 +132,6 @@ router.post('/vote', async (req, res) => {
     const matchIds = Object.keys(body);
     const userId = req.user.id;
     let votedArr = [];
-    console.log(matchIds);
     if (matchIds.length == 0) {
       try {
         res.redirect('/');
@@ -175,7 +178,6 @@ router.post('/vote', async (req, res) => {
         });
     }
     if (votedArr.length > 0) {
-      console.log(votedArr);
       const resObj = {};
       resObj['status'] = 'OK';
       resObj['voted'] = votedArr;
