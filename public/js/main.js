@@ -13,7 +13,7 @@ const alertSpan = document.querySelector('.alert__msg');
 // });
 rightBtn.addEventListener('click', getNextMatch);
 leftBtn.addEventListener('click', getPrevMatch);
-// voteBtn.addEventListener('click', submitVote);
+voteBtn.addEventListener('click', submitVote);
 
 //global variable
 let matches = [];
@@ -61,6 +61,18 @@ async function fetchMatch(date) {
   const data = await fetch(`/match?date=${formatDate(date)}`).then((res) =>
     res.json()
   );
+  return data;
+}
+
+async function fetchVote(votes) {
+  console.log(votes);
+  let data = await fetch('/vote', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(votes),
+  }).then((res) => res.json());
   return data;
 }
 
@@ -196,6 +208,56 @@ function formatDate(date) {
   return date.substring(0, 10);
 }
 
+async function submitVote(event) {
+  event.preventDefault();
+  const votes = {};
+  const form = document.voteSubmit;
+  for (const dayMatch of matches[curIdx]) {
+    for (const match of dayMatch) {
+      let elements = document.getElementsByName(match._id);
+      if (elements[0].checked) {
+        votes[match._id] = elements[0].value;
+      } else if (elements[1].checked) {
+        votes[match._id] = elements[1].value;
+      }
+    }
+  }
+  if (votes) {
+    // console.log(votes);
+    // form.submit();
+    const data = await fetchVote(votes);
+    console.log(data);
+    if (data.status == 'login') {
+      alert('로그인이 필요합니다.');
+    } else if (data.status == 'OK') {
+      const votedArr = data.voted;
+      // console.log(voted);
+
+      for (const dayMatch of matches[curIdx]) {
+        for (const match of dayMatch) {
+          if (checkVoteId(match._id, votedArr)) {
+            const votedTeam = votes[match._id];
+            match.userVote = votedTeam;
+            match[`${votedTeam}TeamVotes`]++;
+          }
+        }
+      }
+      viewThisWeekMatch();
+    }
+  } else {
+    alert('한 개 이상 투표하셔야 합니다!');
+  }
+}
+
+function checkVoteId(id, votes) {
+  for (const vote of votes) {
+    if (id == vote) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // function viewTodayMatch(date) {
 //   const curDate = formatDate(date);
 //   let matchOfDayCount = 0;
@@ -266,9 +328,4 @@ function formatDate(date) {
 //     matchLi.innerHTML = htmlString;
 //     container.appendChild(matchLi);
 //   }
-// }
-
-// function submitVote(event) {
-//   // event.preventDefault();
-//   console.log('sdf');
 // }

@@ -32,9 +32,7 @@ router.get('/', async (req, res) => {
       const userVotes = await Vote.find({
         userId: req.user.id,
         matchId: { $gte: matches[0]._id },
-      })
-        .limit(matchOfWeekCount)
-        .sort({ matchId: 1 });
+      }).sort({ matchId: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
     } else {
       matches = helper.mapMatchVote(matches, ['0']);
@@ -115,13 +113,17 @@ router.get('/match', async (req, res) => {
 
 // @desc vote to selected team
 // @route POST /vote
-router.post('/vote', ensureAuthenticated, async (req, res) => {
+router.post('/vote', async (req, res) => {
+  console.log(req);
+  if (!req.isAuthenticated()) {
+    res.send({ status: 'login' });
+    return;
+  }
   try {
-    console.log(Object.keys(req.body));
-    console.log('vote');
     const body = req.body;
     const matchIds = Object.keys(body);
     const userId = req.user.id;
+    let votedArr = [];
     console.log(matchIds);
     if (matchIds.length == 0) {
       try {
@@ -144,9 +146,10 @@ router.post('/vote', ensureAuthenticated, async (req, res) => {
 
       if (vote) {
         // 이미 유저가 그 매치에 대해 투표했을 경우
-        console.log(vote);
+        console.log('vote exist');
         continue;
       } else {
+        console.log('voted');
         Vote.create({
           userId: userId,
           matchId: id,
@@ -160,14 +163,22 @@ router.post('/vote', ensureAuthenticated, async (req, res) => {
       })
         .exec()
         .then((match, err) => {
-          console.log(`match: ${match}`);
           if (err) {
             req.render('error/500');
             return;
           }
+          votedArr.push(id);
         });
     }
-    res.send({ status: 'OK' });
+    if (votedArr.length > 0) {
+      console.log(votedArr);
+      const resObj = {};
+      resObj['status'] = 'OK';
+      resObj['voted'] = votedArr;
+      res.send(JSON.stringify(resObj));
+    } else {
+      res.send({ status: 'reject' });
+    }
   } catch (err) {
     console.log(err);
     res.render('error/500');
