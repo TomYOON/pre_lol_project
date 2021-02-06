@@ -37,9 +37,12 @@ function buildVoteForm(htmlStr) {
 
 /** @return {String} */
 function biuldMatchHtml(match) {
-  const dateValid = dateValidCheck(match.gameStartDate, match.gameStartTime)
-    ? ''
-    : 'disabled';
+  const dateValid =
+    match.userVote != '' ||
+    dateValidCheck(match.gameStartDate, match.gameStartTime)
+      ? ''
+      : 'disabled';
+
   const htmlString = `
   <label class="left__team ${match.userVote == 'home' ? 'voted' : ''}">
   <input type="radio" name=${
@@ -149,11 +152,6 @@ function viewThisWeekMatch() {
 
   const curMatches = matches[curIdx];
   for (const dayMappedMatch of curMatches) {
-    const dateValid = dateValidCheck(
-      dayMappedMatch[0].gameStartDate,
-      dayMappedMatch[0].gameStartTime
-    );
-
     const matchDiv = document.createElement('div');
     const dateSpan = document.createElement('span');
     matchDiv.classList.add('day__match');
@@ -165,7 +163,10 @@ function viewThisWeekMatch() {
     for (const match of dayMappedMatch) {
       const matchLi = document.createElement('li');
       matchLi.classList.add('match__list');
-      if (!dateValidCheck(match.gameStartDate, match.gameStartTime)) {
+      if (
+        match.userVote != '' ||
+        !dateValidCheck(match.gameStartDate, match.gameStartTime)
+      ) {
         matchLi.classList.add('ended__match');
       }
 

@@ -11,6 +11,18 @@
   margin: 0;
   text-align: center;
 }
+
+a:link,
+a:visited {
+  color: black;
+}
+a:hover {
+  color: red;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
 header {
   display: flex;
   justify-content: center;
