@@ -8,28 +8,34 @@ const voteBtn = document.querySelector('.voteSubmit__btn');
 const alertSpan = document.querySelector('.alert__msg');
 
 //event
-// document.addEventListener('DOMContentLoaded', () => {
-//   fetchMatch(new Date());
-// });
 rightBtn.addEventListener('click', getNextMatch);
 leftBtn.addEventListener('click', getPrevMatch);
 voteBtn.addEventListener('click', submitVote);
+// document.addEventListener('DOMContentLoaded', () => {
+//   fetchMatch(new Date());
+// });
 
 //global variable
 let matches = [];
 let curIdx = 0;
 let matchPerDay = 2;
 
-function test(match) {
+//onload function
+/** @return {None} */
+function processMatch(match) {
   matches.push(mapMatchDay(match));
   viewThisWeekMatch();
 }
+
+//build html fuction
+/** @return {String} */
 function buildVoteForm(htmlStr) {
   return `<form method="post" action='/vote' name="voteSubmit" class="vote__form">
   ${htmlStr}
   <input type="button" value="투표하기" class="voteSubmit__btn"/>`;
 }
 
+/** @return {String} */
 function biuldMatchHtml(match) {
   const dateValid = dateValidCheck(match.gameStartDate, match.gameStartTime)
     ? ''
@@ -56,6 +62,8 @@ function biuldMatchHtml(match) {
   return htmlString;
 }
 
+// fetch function
+/** @return {Array<object>} */
 async function fetchMatch(date) {
   console.log(date);
   const data = await fetch(`/match?date=${formatDate(date)}`).then((res) =>
@@ -64,6 +72,7 @@ async function fetchMatch(date) {
   return data;
 }
 
+/** @return {Array<object>} */
 async function fetchVote(votes) {
   console.log(votes);
   let data = await fetch('/vote', {
@@ -76,8 +85,12 @@ async function fetchVote(votes) {
   return data;
 }
 
+// process match function
+/** @return {Array<object>} */
 function mapMatchDay(matches) {
   if (matches.length < 1) return;
+
+  /** match를 시간순으로 정렬 */
   matches.sort((a, b) =>
     a.gameStartDate > b.gameStartDate
       ? 1
@@ -87,87 +100,50 @@ function mapMatchDay(matches) {
         : -1
       : -1
   );
+
   let curDate = matches[0].gameStartDate;
-  let ret = [];
-  let dateArr = [];
+  let mapedArr = [];
+  let dateArr = []; //날짜가 같은 경기를 담을 배열
+
   for (let i = 0; i < matches.length; i++) {
     if (matches[i].gameStartDate == curDate) {
       dateArr.push(matches[i]);
     } else {
       curDate = matches[i].gameStartDate;
-      ret.push(dateArr);
+      mapedArr.push(dateArr);
       dateArr = [matches[i]];
     }
   }
-  ret.push(dateArr);
-  return ret;
+  mapedArr.push(dateArr);
+  return mapedArr;
 }
 
-async function getNextMatch() {
-  leftBtn.disabled = false;
-  alertSpan.innerHTML = '';
-  console.log(matches[curIdx][0][0].gameStartDate);
-  if (curIdx === matches.length - 1) {
-    const curDate = new Date(matches[curIdx][0][0].gameStartDate);
-    curDate.setDate(curDate.getDate() + 7);
-    console.log(123, curDate);
-    const matchArr = await fetchMatch(curDate);
-    if (matchArr.length > 0) {
-      matches.push(mapMatchDay(matchArr));
-      curIdx++;
-    } else {
-      alertSpan.innerHTML = '경기가 없습니다.';
-      rightBtn.disabled = true;
-    }
-  } else {
-    curIdx++;
-  }
-  viewThisWeekMatch();
-}
-
-async function getPrevMatch() {
-  alertSpan.innerHTML = '';
-  rightBtn.disabled = false;
-  console.log(matches[curIdx][0][0].gameStartDate);
-  if (curIdx === 0) {
-    const curDate = new Date(matches[curIdx][0][0].gameStartDate);
-    curDate.setDate(curDate.getDate() - 7);
-    console.log(123, curDate);
-    const matchArr = await fetchMatch(curDate);
-    if (matchArr.length > 0) {
-      // matches.push(mapMatchDay(matchArr));
-      matches.splice(0, 0, mapMatchDay(matchArr));
-    } else {
-      alertSpan.innerHTML = '경기가 없습니다.';
-      leftBtn.disabled = true;
-    }
-  } else {
-    curIdx--;
-  }
-  viewThisWeekMatch();
-}
+/** @return {bool} */
 function dateValidCheck(matchDate, matchTime) {
   const today = new Date();
   const date = formatDate(today);
   const curHour = today.getHours();
-  let ret = true;
+  let isOverTime = true;
+
   if (matchDate < date) {
-    ret = false;
+    isOverTime = false;
   } else if (matchDate == date) {
     if (parseInt(matchTime.substring(0, 2)) <= curHour) {
-      ret = false;
+      isOverTime = false;
     }
   }
 
-  return ret;
+  return isOverTime;
 }
 
+/** @return {None} */
 function getDay(dateStr) {
   const date = new Date(dateStr);
   const day = date.getDay();
   const dayArr = ['일', '월', '화', '수', '목', '금', '토'];
   return dayArr[day];
 }
+/** @return {bool} */
 function viewThisWeekMatch() {
   container.innerHTML = '';
 
@@ -201,6 +177,7 @@ function viewThisWeekMatch() {
   }
 }
 
+/** @return {String} */
 function formatDate(date) {
   if (typeof date == typeof new Date()) {
     return date.toISOString().substring(0, 10);
@@ -208,6 +185,54 @@ function formatDate(date) {
   return date.substring(0, 10);
 }
 
+// button listener function
+/** @return {None} */
+async function getNextMatch() {
+  leftBtn.disabled = false;
+  alertSpan.innerHTML = '';
+  console.log(matches[curIdx][0][0].gameStartDate);
+  if (curIdx === matches.length - 1) {
+    const curDate = new Date(matches[curIdx][0][0].gameStartDate);
+    curDate.setDate(curDate.getDate() + 7);
+    console.log(123, curDate);
+    const matchArr = await fetchMatch(curDate);
+    if (matchArr.length > 0) {
+      matches.push(mapMatchDay(matchArr));
+      curIdx++;
+    } else {
+      alertSpan.innerHTML = '경기가 없습니다.';
+      rightBtn.disabled = true;
+    }
+  } else {
+    curIdx++;
+  }
+  viewThisWeekMatch();
+}
+
+/** @return {None}*/
+async function getPrevMatch() {
+  alertSpan.innerHTML = '';
+  rightBtn.disabled = false;
+  console.log(matches[curIdx][0][0].gameStartDate);
+  if (curIdx === 0) {
+    const curDate = new Date(matches[curIdx][0][0].gameStartDate);
+    curDate.setDate(curDate.getDate() - 7);
+    console.log(123, curDate);
+    const matchArr = await fetchMatch(curDate);
+    if (matchArr.length > 0) {
+      // matches.push(mapMatchDay(matchArr));
+      matches.splice(0, 0, mapMatchDay(matchArr));
+    } else {
+      alertSpan.innerHTML = '경기가 없습니다.';
+      leftBtn.disabled = true;
+    }
+  } else {
+    curIdx--;
+  }
+  viewThisWeekMatch();
+}
+
+/** @return {None} */
 async function submitVote(event) {
   event.preventDefault();
   const votes = {};
@@ -223,15 +248,12 @@ async function submitVote(event) {
     }
   }
   if (votes) {
-    // console.log(votes);
-    // form.submit();
     const data = await fetchVote(votes);
     console.log(data);
     if (data.status == 'login') {
       alert('로그인이 필요합니다.');
     } else if (data.status == 'OK') {
       const votedArr = data.voted;
-      // console.log(voted);
 
       for (const dayMatch of matches[curIdx]) {
         for (const match of dayMatch) {
@@ -249,6 +271,7 @@ async function submitVote(event) {
   }
 }
 
+/** @return {Bool} */
 function checkVoteId(id, votes) {
   for (const vote of votes) {
     if (id == vote) {
@@ -257,75 +280,3 @@ function checkVoteId(id, votes) {
   }
   return false;
 }
-
-// function viewTodayMatch(date) {
-//   const curDate = formatDate(date);
-//   let matchOfDayCount = 0;
-//   for (const match of matches) {
-//     console.log(curDate, match.gameStartDate);
-//     if (match.gameStartDate === curDate) {
-//       const matchLi = document.createElement('li');
-//       matchLi.classList.add('match__list');
-
-//       const htmlString = biuldMatchHtml(match);
-
-//       matchLi.innerHTML = htmlString;
-//       container.appendChild(matchLi);
-//       if (++matchOfDayCount == matchPerDay) {
-//         break;
-//       }
-//     }
-//     curIdx++;
-//     console.log(curIdx);
-//   }
-
-//   if (matchOfDayCount == 0) {
-//     //오늘 매치가 없을 경우
-//     curIdx = -1;
-//     getNextMatch();
-//   }
-// }
-
-// function getNextMatch() {
-//   if (matches.length < curIdx + matchPerDay) {
-//     let date = new Date(matches[matches.length - 1].gameStartDate);
-//     date.setDate(date.getDate() + 7); //다음주
-
-//     fetchMatch(date);
-//     return;
-//   }
-
-//   container.innerHTML = '';
-//   leftBtn.disabled = false;
-//   for (let i = 0; i < matchPerDay; i++) {
-//     const matchLi = document.createElement('li');
-//     matchLi.classList.add('match__list');
-//     const match = matches[++curIdx];
-//     matchDay.innerHTML = match.gameStartDate;
-//     const htmlString = biuldMatchHtml(match);
-//     matchLi.innerHTML = htmlString;
-//     container.appendChild(matchLi);
-//   }
-// }
-
-// function getPrevMatch() {
-//   const minusIdx = matchPerDay * 2; //현재 인덱스에서 하루 매치의 2배를 뒤로가서 ++하는 방식으로 보여줌
-//   if (curIdx - minusIdx < 0) {
-//     let date = new Date(matches[0].gameStartDate);
-//     date.setDate(date.getDate() - 7);
-//     fetchMatch(date, false);
-//     return;
-//   }
-//   rightBtn.disabled = false;
-//   container.innerHTML = '';
-//   curIdx -= minusIdx;
-//   for (let i = 0; i < matchPerDay; i++) {
-//     const matchLi = document.createElement('li');
-//     matchLi.classList.add('match__list');
-//     const match = matches[++curIdx];
-//     matchDay.innerHTML = match.gameStartDate;
-//     const htmlString = biuldMatchHtml(match);
-//     matchLi.innerHTML = htmlString;
-//     container.appendChild(matchLi);
-//   }
-// }

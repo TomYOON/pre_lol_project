@@ -14,8 +14,8 @@ router.get('/', async (req, res) => {
 
   try {
     const dateObj = helper.getThisWeek(today);
-    const startDate = helper.formatDate(dateObj.startDate);
-    const endDate = helper.formatDate(dateObj.endDate);
+    const startDate = helper.formatDate(dateObj.startDate); //그 주의 월요일
+    const endDate = helper.formatDate(dateObj.endDate); //일요일
     // console.log(startDate, endDate);
     let matches = await Match.find({
       gameStartDate: { $gte: startDate },
@@ -52,7 +52,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// @desc root/Landing page
+// @desc get match data of week
 // @route GET /match
 router.get('/match', async (req, res) => {
   const reqDate = new Date(req.query.date);
@@ -62,8 +62,10 @@ router.get('/match', async (req, res) => {
     const dateObj = helper.getThisWeek(reqDate);
     const startDate = helper.formatDate(dateObj.startDate);
     const endDate = helper.formatDate(dateObj.endDate);
-    const firstMatch = '2021-01-13';
+    const firstMatch = '2021-01-13'; //경기의 시작일, 나중에 디비에서 받아오는 식으로 바꿔야함
+
     if (endDate < firstMatch) {
+      //경기가 첫경기보다 이전 주를 요청했을 경우
       res.send([]);
       return;
     }
@@ -88,6 +90,7 @@ router.get('/match', async (req, res) => {
     console.log(matches);
 
     if (req.isAuthenticated()) {
+      //로그인 되어있으면 투표한 데이터를 넘겨줌
       const userVotes = await Vote.find({
         userId: req.user.id,
         matchId: { $gte: matches[0]._id },
@@ -120,6 +123,7 @@ router.post('/vote', async (req, res) => {
     return;
   }
   try {
+    /** TODO: 투표와 경기의 투표수 업데이트를 트랜잭션으로 바꿔야함. */
     const body = req.body;
     const matchIds = Object.keys(body);
     const userId = req.user.id;
