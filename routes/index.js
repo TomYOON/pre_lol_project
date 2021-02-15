@@ -62,12 +62,13 @@ router.get('/', async (req, res) => {
 // @route GET /match
 router.get('/match', async (req, res) => {
   const reqDate = new Date(req.query.date);
+  const next = req.query.next == 'true' ? true : false;
   const matchOfWeekCount = 10;
 
   try {
-    const dateObj = helper.getThisWeek(reqDate);
-    const startDate = helper.formatDate(dateObj.startDate);
-    const endDate = helper.formatDate(dateObj.endDate);
+    let dateObj = helper.getThisWeek(reqDate);
+    let startDate = helper.formatDate(dateObj.startDate);
+    let endDate = helper.formatDate(dateObj.endDate);
     const firstMatch = '2021-01-13'; //경기의 시작일, 나중에 디비에서 받아오는 식으로 바꿔야함
 
     if (endDate < firstMatch) {
@@ -82,16 +83,25 @@ router.get('/match', async (req, res) => {
       .limit(matchOfWeekCount)
       .sort({ _id: 1 });
 
-    if (matches.length == 0) {
+    if (matches.length < 1) {
+      if (next) {
+        dateObj = helper.getNextWeek(startDate);
+      } else {
+        dateObj = helper.getPrevWeek(startDate);
+      }
+      startDate = helper.formatDate(dateObj.startDate);
+      endDate = helper.formatDate(dateObj.endDate);
+
       matches = await Match.find({
-        gameStartDate: { $gte: startDate },
+        gameStartDate: { $gte: startDate, $lte: endDate },
       })
         .limit(matchOfWeekCount)
         .sort({ _id: 1 });
-      if (matches.length == 0) {
-        res.send(matches);
-        return;
-      }
+    }
+
+    if (matches.length < 1) {
+      res.send([]);
+      return;
     }
 
     if (req.isAuthenticated()) {
@@ -162,6 +172,7 @@ router.post('/vote', async (req, res) => {
           matchId: id,
           voteTo: votedTeam,
           processed: false,
+          point: 0,
         });
       }
 

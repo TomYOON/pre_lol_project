@@ -67,11 +67,11 @@ function biuldMatchHtml(match) {
 
 // fetch function
 /** @return {Array<object>} */
-async function fetchMatch(date) {
+async function fetchMatch(date, next = true) {
   console.log(date);
-  const data = await fetch(`/match?date=${formatDate(date)}`).then((res) =>
-    res.json()
-  );
+  const data = await fetch(
+    `/match?date=${formatDate(date)}&next=${next}`
+  ).then((res) => res.json());
   return data;
 }
 
@@ -146,7 +146,8 @@ function getDay(dateStr) {
   const dayArr = ['일', '월', '화', '수', '목', '금', '토'];
   return dayArr[day];
 }
-/** @return {bool} */
+
+/** @return {None} */
 function viewThisWeekMatch() {
   container.innerHTML = '';
 
@@ -219,7 +220,7 @@ async function getPrevMatch() {
     const curDate = new Date(matches[curIdx][0][0].gameStartDate);
     curDate.setDate(curDate.getDate() - 7);
     console.log(123, curDate);
-    const matchArr = await fetchMatch(curDate);
+    const matchArr = await fetchMatch(curDate, (next = false));
     if (matchArr.length > 0) {
       // matches.push(mapMatchDay(matchArr));
       matches.splice(0, 0, mapMatchDay(matchArr));

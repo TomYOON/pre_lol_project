@@ -6,13 +6,35 @@ module.exports = {
     return date.toISOString().substring(0, 7);
   },
 
-  getThisWeek: function (curr = new Date()) {
-    const today = (curr.getDay() + 6) % 7; //월요일부터 시작 월 = 0, 일 = 6
-    let first = curr.getDate() - today; // First day is the day of the month - the day of the week
-    // console.log(`first: ${first}`, curr.getDay());
-    let firstday = new Date(curr.setDate(first));
-    let lastday = new Date(curr.setDate(firstday.getDate() + 6));
+  getThisWeek: function (date = new Date()) {
+    if (typeof date == typeof '') {
+      // 스트링으로 들어올 경우 처리
+      date = new Date(date);
+    }
+    const today = (date.getDay() + 6) % 7; //월요일부터 시작 월 = 0, 일 = 6
+    let first = date.getDate() - today; // First day is the day of the month - the day of the week
+    // console.log(`first: ${first}`, date.getDay());
+    let firstday = new Date(date.setDate(first));
+    let lastday = new Date(date.setDate(firstday.getDate() + 6));
     return { startDate: firstday, endDate: lastday };
+  },
+
+  getPrevWeek: function (date) {
+    if (typeof date == typeof '') {
+      // 스트링으로 들어올 경우 처리
+      date = new Date(date);
+    }
+    date.setDate(date.getDate() - 7);
+    return this.getThisWeek(date);
+  },
+
+  getNextWeek: function (date) {
+    if (typeof date == typeof '') {
+      // 스트링으로 들어올 경우 처리
+      date = new Date(date);
+    }
+    date.setDate(date.getDate() + 7);
+    return this.getThisWeek(date);
   },
 
   mapMatchVote: function (matches, votes) {
