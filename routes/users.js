@@ -5,12 +5,25 @@ const passport = require('passport');
 
 // User model
 const User = require('../models/User');
+const Vote = require('../models/Vote');
 
 // Login Page
 router.get('/login', (req, res) => res.render('login'));
 
 // Register Page
 router.get('/register', (req, res) => res.render('register'));
+
+router.get('/:userid', async (req, res) => {
+  try {
+    const userId = req.params.userid;
+    const votes = await Vote.find({ userId: userId });
+    // let matchIds = []
+    console.log(votes);
+    res.render('userVotes', { votes });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 // Register Handle
 router.post('/register', (req, res) => {

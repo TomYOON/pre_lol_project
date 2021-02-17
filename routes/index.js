@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
   const matchOfWeekCount = 10;
   let userName = '';
   let userPoint = '';
+  let userId = '';
 
   try {
     const dateObj = helper.getThisWeek(today);
@@ -33,6 +34,7 @@ router.get('/', async (req, res) => {
     if (req.isAuthenticated()) {
       userName = req.user.name;
       userPoint = req.user.point;
+      userId = req.user._id;
       const userVotes = await Vote.find({
         userId: req.user.id,
         matchId: { $gte: matches[0]._id },
@@ -51,6 +53,7 @@ router.get('/', async (req, res) => {
       matches,
       userName,
       userPoint,
+      userId,
     });
   } catch (err) {
     console.log(err);
