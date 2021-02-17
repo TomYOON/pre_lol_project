@@ -1,16 +1,9 @@
-<button class="test">test</button>
+<% if (userObj['userCount'] !== 0) { %>
+  <% for (let i=0; i<userObj['userData'].length; i++) { %>
+    <h3><%= (userObj.page-1) * userObj['pagePerUsers'] + i+1%> <%= userObj['userData'][i].name%> <%= userObj['userData'][i].point%></h3>
+  <%}%>
 
-<div class="matches">
-  <div class="match__title">
-    <button class="left__button"><i class="fas fa-chevron-left"></i></button>
-    <span class="match__day">Today's match</span>
-    <button class="right__button"><i class="fas fa-chevron-right"></i></button>
-    <form method="GET" action="/change-month" hidden name="changeMonth">
-      <input type="text" name="date" id="date">
-    </form>
-
-  </div>
-  <div class="vote__container">
-
-  </div>
-</div>
+  <% for (let i = 1; i < userObj['userCount'] / userObj['pagePerUsers'] + 1; i++) {%>
+    <a href="/rank/<%=i%>"><%=i%></a>
+  <%}%>
+<%}%>

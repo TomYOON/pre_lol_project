@@ -1,74 +1,43 @@
 const express = require('express');
 const router = express.Router();
-const Match = require('../models/Match');
-const Vote = require('../models/Vote');
-const helper = require('../helper/helper');
-const { ensureAuthenticated } = require('../config/auth');
-const moment = require('moment');
-require('moment-timezone');
-moment.tz.setDefault('Asia/Seoul');
+
+// User model
+const User = require('../models/User');
+const pagePerUsers = 20;
 
 router.get('/', async (req, res) => {
-  res.render('rank');
-});
-
-function mapMatchVote(matches, votes) {
-  // if (matches.length == 0) {
-  //   return matches;
-  // }
-  let voteIdx = 0;
-  let matchIdx = 0;
-  let mapedArr = [];
-  while (matchIdx < matches.length) {
-    const obj = matches[matchIdx].toObject();
-    if (voteIdx < votes.length && obj._id == votes[voteIdx].matchId) {
-      obj['userVote'] = votes[voteIdx].voteTo;
-      voteIdx++;
-    } else {
-      obj['userVote'] = '';
-    }
-    mapedArr.push(obj);
-    matchIdx++;
-  }
-  // console.log(`length: ${voteIdx}, ${votes.length}`);
-  return mapedArr;
-}
-
-// @desc root/Landing page
-// @route GET /
-router.get('/test2', async (req, res) => {
-  console.log(req.isAuthenticated());
-  // console.log(req.query, '123');
-  const reqDate = new Date(req.query.date);
-  // console.log(moment().endOf('week').toDate());
+  const userObj = { userCount: 0 };
   try {
-    const dateObj = helper.getThisWeek(reqDate);
-    const startDate = helper.formatDate(dateObj.startDate);
-    const endDate = helper.formatDate(dateObj.endDate);
-    // console.log(startDate, endDate);
-    let matches = await Match.find({
-      gameStartDate: { $gte: startDate, $lte: endDate },
-    }).sort({ _id: 1 });
+    const userCount = await User.countDocuments({}, (err, count) => count);
+    const users = await User.find().sort({ point: -1 }).limit(pagePerUsers);
 
-    if (req.isAuthenticated()) {
-      const userVotes = await Vote.find({
-        userId: req.user.id,
-      }).sort({ matchId: 1 });
-      matches = mapMatchVote(matches, userVotes);
-    } else {
-      matches = mapMatchVote(matches, ['0']);
-    }
-    let isEmpty = false;
-
-    if (matches.length == 0) {
-      isEmpty = true;
-    }
-
-    res.send(matches);
+    userObj['userCount'] = userCount;
+    userObj['page'] = 1;
+    userObj['userData'] = users;
+    userObj['pagePerUsers'] = pagePerUsers;
+    res.render('rank', { userObj });
   } catch (err) {
     console.log(err);
-    res.render('error/500');
   }
 });
 
+router.get('/:page', async (req, res) => {
+  const userObj = { userCount: 0 };
+  const page = parseInt(req.params.page);
+  try {
+    const userCount = await User.countDocuments({}, (err, count) => count);
+    const users = await User.find()
+      .sort({ point: -1 })
+      .skip((page - 1) * pagePerUsers)
+      .limit(page * pagePerUsers);
+
+    userObj['userCount'] = userCount;
+    userObj['page'] = page;
+    userObj['userData'] = users;
+    userObj['pagePerUsers'] = pagePerUsers;
+    res.render('rank', { userObj });
+  } catch (err) {
+    console.log(err);
+  }
+});
 module.exports = router;

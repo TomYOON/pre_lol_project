@@ -82,7 +82,7 @@ router.get('/match', async (req, res) => {
     })
       .limit(matchOfWeekCount)
       .sort({ _id: 1 });
-
+    console.log(matches);
     if (matches.length < 1) {
       if (next) {
         dateObj = helper.getNextWeek(startDate);
