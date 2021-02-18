@@ -6,6 +6,7 @@ const passport = require('passport');
 // User model
 const User = require('../models/User');
 const Vote = require('../models/Vote');
+const Match = require('../models/Match');
 
 // Login Page
 router.get('/login', (req, res) => res.render('login'));
@@ -13,13 +14,22 @@ router.get('/login', (req, res) => res.render('login'));
 // Register Page
 router.get('/register', (req, res) => res.render('register'));
 
+// User page
 router.get('/:userid', async (req, res) => {
   try {
+    let matchIds = [];
     const userId = req.params.userid;
-    const votes = await Vote.find({ userId: userId });
-    // let matchIds = []
-    console.log(votes);
-    res.render('userVotes', { votes });
+    const votes = await Vote.find({ userId: userId }).sort({ matchId: -1 });
+
+    votes.forEach((vote) => {
+      matchIds.push(vote.matchId);
+    });
+
+    const matches = await Match.find({ _id: { $in: matchIds } }).sort({
+      _id: -1,
+    });
+    console.log(matches);
+    res.render('userVotes', { votes, matches });
   } catch (err) {
     console.log(err);
   }

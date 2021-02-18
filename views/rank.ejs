@@ -1,6 +1,6 @@
 <% if (userObj['userCount'] !== 0) { %>
   <% for (let i=0; i<userObj['userData'].length; i++) { %>
-    <h3><%= (userObj.page-1) * userObj['pagePerUsers'] + i+1%> <%= userObj['userData'][i].name%> <%= userObj['userData'][i].point%></h3>
+    <a href="/users/<%=userObj['userData'][i]._id%>"><h3><%= (userObj.page-1) * userObj['pagePerUsers'] + i+1%> <%= userObj['userData'][i].name%> <%= userObj['userData'][i].point%></h3></a>
   <%}%>
 
   <% for (let i = 1; i < userObj['userCount'] / userObj['pagePerUsers'] + 1; i++) {%>
