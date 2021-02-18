@@ -85,7 +85,7 @@ router.get('/match', async (req, res) => {
     })
       .limit(matchOfWeekCount)
       .sort({ _id: 1 });
-    console.log(matches);
+
     if (matches.length < 1) {
       if (next) {
         dateObj = helper.getNextWeek(startDate);
@@ -166,10 +166,8 @@ router.post('/vote', async (req, res) => {
 
       if (vote) {
         // 이미 유저가 그 매치에 대해 투표했을 경우
-        console.log('vote exist');
         continue;
       } else {
-        console.log('voted');
         Vote.create({
           userId: userId,
           matchId: id,

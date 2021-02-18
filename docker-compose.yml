@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  nodejs:
+    container_name: nodejs
+    image: 'dbsxotjd77/node-web-app'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+  nginx:
+    container_name: nginx
+    image: 'dbsxotjd77/nginx'
+    ports:
+      - '80:80'
