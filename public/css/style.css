@@ -1,6 +1,6 @@
 :root {
   --text-color: #f0f4f5;
-  --background-color: #5484e8;
+  --background-color: #2b4fff;
   /* --background-light-color: #90caf9; */
   --accent-color: #d49466;
 
@@ -10,6 +10,15 @@
   padding: 0;
   margin: 0;
   text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;}
+
+#logo{ width: 400px; height:auto; float: right; margin-right: 500px; 
+    align-items: center; display: inline-block;}
+header{width: 1480px; height: 180px; padding-right: 500px; position: relative; padding: 20px;}
+
+
+body:not(.navbar) {
+   background-color: #f5f6f7;
 }
 
 a:link,
@@ -23,6 +32,30 @@ a {
   text-decoration: none;
   color: black;
 }
+
+.navbar {
+  display: flex;    
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2b4fff;
+  padding: var(--pading);   
+}
+.navbar .profile a{color: white; padding-right: 200px; }
+.navbar__menu {      
+  color: white;
+  display: flex; 
+ }  
+.navbar__menu li {
+    padding: var(--pading);
+}
+.navbar__menu li >a{
+    margin-left: 100px;
+    color: white;
+    padding: var(--pading);
+}
+
+
+
 header {
   display: flex;
   justify-content: center;
@@ -40,21 +73,27 @@ ul {
   list-style: none;
   margin: 0;
 }
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--background-color);
-  padding: var(--pading);
-}
 
-.navbar__menu {
-  display: flex;
-}
+.join{background-color: #14bf68;
+width: 470px; height:40px;
+padding: 5px 30px;
+margin: auto;
+border-radius: 5px;
+font-weight: 600px;} 
+.join a{color: white; text-decoration: none; }
+.join a:hover{color: antiquewhite; }
 
-.navbar__menu li {
-  padding: var(--pading);
-}
+
+.yet{font-size: 13px; }
+
+
+td{ padding: 3px;} 
+table{  font-family: 'Noto Sans KR', sans-serif;
+border:1px solid #dddddd;}
+thead{background-color: #dddddd; border: 1px solid #616971;}
+table tbody tr:nth-child(2n){background-color: #f9f9f9;}
+table tbody tr:nth-child(2n-1){background-color: #ffffff;}
+
 
 .matches {
   padding: 50px 100px;
@@ -73,7 +112,7 @@ ul {
   justify-content: center;
   align-items: center;
 }
-
+    
 .match__title {
   display: flex;
   justify-content: center;
