@@ -5,10 +5,12 @@ const router = express.Router();
 const User = require('../models/User');
 const pagePerUsers = 20;
 
+// @desc ranking/Landing page
+// @route GET /rank
 router.get('/', async (req, res) => {
   const userObj = { userCount: 0 };
   try {
-    const userCount = await User.countDocuments({}, (err, count) => count);
+    const userCount = await User.countDocuments({}, (err, count) => count); // 유저 전체 수
     const users = await User.find().sort({ point: -1 }).limit(pagePerUsers);
 
     userObj['userCount'] = userCount;
@@ -21,11 +23,13 @@ router.get('/', async (req, res) => {
   }
 });
 
+// @desc ranking/ page Landing page
+// @route GET /rank/:page
 router.get('/:page', async (req, res) => {
   const userObj = { userCount: 0 };
   const page = parseInt(req.params.page);
   try {
-    const userCount = await User.countDocuments({}, (err, count) => count);
+    const userCount = await User.countDocuments({}, (err, count) => count); //유저 전체 수
     const users = await User.find()
       .sort({ point: -1 })
       .skip((page - 1) * pagePerUsers)
