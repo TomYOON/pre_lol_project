@@ -7,6 +7,8 @@ lck 경기 예측 투표 웹 어플리케이션
 - 개인 투표 목록
 - 게시판 (개발예정)
 
+demo url: ec2-54-83-129-145.compute-1.amazonaws.com
+
 # 사용 기술
 
 - mongoDB with mongoose
