@@ -1,38 +1,38 @@
-<div class="row mt-5">
-    <div class="col-md-6 m-auto">
-        <div class="card card-body">
-            <h1 class="text-center mb-3">
-                <h4>Ranking</h4>
-                <br>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>User</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (userObj['userCount'] !== 0) { %>
-                        <% for (let i=0; i<userObj['userData'].length; i++) { %>
-                        <tr>
-                            <td> <%= (userObj.page-1) * userObj['pagePerUsers'] + i+1%></td>
-                            <td> <a href="/users/<%=userObj['userData'][i]._id%>"><%= userObj['userData'][i].name%></a></td>
-                            <td><%= userObj['userData'][i].point%></td>
-                        </tr>
-                        <%}%>
+<div class="jumbotron my-5 ">
+    <div class="col-md-10 m-auto">
+        <h1 class="text-center mb-3">Ranking</h1>
+        <br>
+        <table class="table table-striped">
+
+            <thead>
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Score</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <% if (userObj['userCount'] !== 0) { %>
+                <% for (let i=0; i<userObj['userData'].length; i++) { %>
+                <tr>
+                    <td> <%= (userObj.page-1) * userObj['pagePerUsers'] + i+1%></td>
+                    <td> <a href="/users/<%=userObj['userData'][i]._id%>"><%= userObj['userData'][i].name%></a></td>
+                    <td><%= userObj['userData'][i].point%></td>
+                </tr>
+                <%}%>
                 </tbody>
         </table> 
           
  <br><br>
           
-          <table><tr>
-  <% for (let i = 1; i < userObj['userCount'] / userObj['pagePerUsers'] + 1; i++) {%>
-                        <td> <a href="/rank/<%=i%>"><%=i%></a></td>
-                        <%}%><%}%>
-                        </tr>
-                </table>
+          <table  class="col-md-6 m-auto">
+              <tr>
+        <% for (let i = 1; i < userObj['userCount'] / userObj['pagePerUsers'] + 1; i++) {%>
+                <td> <a href="/rank/<%=i%>"><%=i%></a></td>
+                <%}%><%}%>
+                </tr>
+        </table>
 
-        </div>
     </div>
 </div>
