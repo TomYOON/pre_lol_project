@@ -5,3 +5,4 @@ node_modules/
 
 # critical data
 *.env
+crawl/__pycache__/setting.cpython-38.pyc

@@ -60,6 +60,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/rank', require('./routes/ranking'));
+app.use('/board', require('./routes/board'));
 
 const PORT = process.env.PORT || 5000; //앞에 포트가 안될 경우 5000
 
