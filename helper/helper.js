@@ -44,7 +44,7 @@ module.exports = {
     while (matchIdx < matches.length) {
       const obj = matches[matchIdx].toObject();
       obj['userVote'] = '';
-      if (!(voteIdx < votes.length)) {
+      if (voteIdx >= votes.length) {
         mapedArr.push(obj);
         matchIdx++;
         continue;
@@ -56,6 +56,7 @@ module.exports = {
         matchIdx++;
       } else if (obj._id > votes[voteIdx].match) {
         voteIdx++;
+        continue;
       } else {
         matchIdx++;
       }

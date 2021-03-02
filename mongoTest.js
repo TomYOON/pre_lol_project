@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bcrpyt = require('bcryptjs');
 const User = require('./models/User');
+const Match = require('./models/Match');
 dotenv.config({ path: './config/.env' });
 
 //connect db
@@ -24,17 +25,30 @@ const connectDB = async () => {
 
 connectDB();
 
-const TestUser = User.aggregate([
-  {
-    $lookup: {
-      from: 'votes',
-      localField: '_id',
-      foreignField: 'user',
-      // pipeline: [{ $match: { user: '603dde3cfd397a0880ba5532' } }],
-      as: 'voteList',
-    },
-  },
-]).exec(console.log);
+// const match = Match.aggregate([
+//   {
+//     $lookup: {
+//       from: 'votes',
+//       localField: '_id',
+//       foreignField: 'match',
+//       as: 'userVote',
+//     },
+//   },
+// ])
+//   .limit(10)
+//   .exec(console.log);
+
+// const testUser = User.aggregate([
+// {
+//   $lookup: {
+//     from: 'votes',
+//     localField: '_id',
+//     foreignField: 'user',
+//     // pipeline: [{ $match: { user: '603dde3cfd397a0880ba5532' } }],
+//     as: 'voteList',
+//   },
+// },
+// ]).exec(console.log);
 
 // test ID 생성
 // for (let i = 0; i < 30; i++) {
