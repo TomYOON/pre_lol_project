@@ -2,6 +2,7 @@
 node_modules/
 .ipynb_checkpoints/
 .prettierignore
+crawl/__pycache__
 
 # critical data
 *.env
