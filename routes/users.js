@@ -15,26 +15,19 @@ router.get('/login', (req, res) => res.render('login'));
 router.get('/register', (req, res) => res.render('register'));
 
 // User page
-router.get('/:userid', async (req, res) => {
+router.get('/:user', async (req, res) => {
   try {
-    let matchIds = [];
-    const userId = req.params.userid;
-    const votes = await Vote.find({ userId: userId }).sort({ matchId: -1 });
+    const user = req.params.user;
+    const votes = await Vote.find({ user: user })
+      .populate('match')
+      .sort({ matchId: -1 });
+    console.log(votes);
 
-    votes.forEach((vote) => {
-      matchIds.push(vote.matchId);
-    });
-
-    const matches = await Match.find({ _id: { $in: matchIds } }).sort({
-      _id: -1,
-    });
-    console.log(matches);
-    res.render('userVotes', { votes, matches });
+    res.render('userVotes', { votes });
   } catch (err) {
     console.log(err);
   }
 });
-
 // Register Handle
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body;
