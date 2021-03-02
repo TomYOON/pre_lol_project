@@ -14,27 +14,22 @@ router.get('/login', (req, res) => res.render('login'));
 // Register Page
 router.get('/register', (req, res) => res.render('register'));
 
-// User page
-router.get('/:userid', async (req, res) => {
+// @desc user vote randing page
+// @route GET /users/vote/:userId
+router.get('/vote/:userId', async (req, res) => {
   try {
-    let matchIds = [];
-    const userId = req.params.userid;
-    const votes = await Vote.find({ userId: userId }).sort({ matchId: -1 });
+    const userId = req.params.userId;
 
-    votes.forEach((vote) => {
-      matchIds.push(vote.matchId);
-    });
+    const votes = await Vote.find({ user: userId })
+      .populate('match')
+      .sort({ match: -1 });
+    // console.log(`user.js: vote: ${votes}`);
 
-    const matches = await Match.find({ _id: { $in: matchIds } }).sort({
-      _id: -1,
-    });
-    console.log(matches);
-    res.render('userVotes', { votes, matches });
+    res.render('userVotes', { votes });
   } catch (err) {
     console.log(err);
   }
 });
-
 // Register Handle
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body;
@@ -124,8 +119,12 @@ router.post('/login', (req, res, next) => {
 
 // Logout Handle
 router.get('/logout', (req, res) => {
-  req.logout(); //passport middleware에 있는 함수
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/users/login');
+  try {
+    req.logout(); //passport middleware에 있는 함수
+    req.flash('success_msg', 'You are logged out');
+    res.redirect('/');
+  } catch (error) {
+    next();
+  }
 });
 module.exports = router;

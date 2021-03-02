@@ -1,16 +1,21 @@
 <body onload="processMatch(<%=JSON.stringify(matches)%>);"></body>
 <div class="matches">
-  <div class="match__title">
-    <button class="left__button"><i class="fas fa-chevron-left"></i></button>
-    <span class="match__day">Today's match</span>
-    <button class="right__button"><i class="fas fa-chevron-right"></i></button>
-  </div>
-  <span class="alert__msg"></span>
-  <form method="post" action='/vote' name="voteSubmit" class="vote__form">
-  <div class="vote__container">
+    <div class="match__title">
+        <button class="left__button"><i class="fas fa-chevron-left"></i></button>
+        <span class="match__day">
+            <h3>Today's match</h3>
+        </span>
+        <button class="right__button">
+            <i class="fas fa-chevron-right"></i></button>
+    </div>
 
-  </div>
-  <!-- <input type="submit" value="투표하기" class="voteSubmit__btn"/> -->
-  <button type="submit" class="voteSubmit__btn">투표하기</button>
-  </form>
+    <span class="alert__msg"></span>
+    <form method="post" action='/vote' name="voteSubmit" class="vote__form">
+        <div class="vote__container">
+
+        </div>
+
+        <!-- <input type="submit" value="투표하기" class="voteSubmit__btn"/> -->
+        <button type="submit" class="voteSubmit__btn">투표하기</button>
+    </form>
 </div>

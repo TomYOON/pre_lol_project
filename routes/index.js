@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   const matchOfWeekCount = 10;
   let userName = '';
   let userPoint = '';
-  let userId = '';
+  let user = '';
 
   try {
     const dateObj = helper.getThisWeek(today);
@@ -34,12 +34,13 @@ router.get('/', async (req, res) => {
     if (req.isAuthenticated()) {
       userName = req.user.name;
       userPoint = req.user.point;
-      userId = req.user._id;
+      user = req.user._id;
       const userVotes = await Vote.find({
-        userId: req.user.id,
-        matchId: { $gte: matches[0]._id },
-      }).sort({ matchId: 1 });
+        user: req.user.id,
+        match: { $gte: matches[0]._id },
+      }).sort({ match: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
+      console.log(`index.js - Vote: ${userVotes}`);
     } else {
       matches = helper.mapMatchVote(matches, ['0']);
     }
@@ -48,12 +49,11 @@ router.get('/', async (req, res) => {
     if (matches.length == 0) {
       isEmpty = true;
     }
-
     res.render('main', {
       matches,
       userName,
       userPoint,
-      userId,
+      user,
     });
   } catch (err) {
     console.log(err);
@@ -110,19 +110,17 @@ router.get('/match', async (req, res) => {
     if (req.isAuthenticated()) {
       //로그인 되어있으면 투표한 데이터를 넘겨줌
       const userVotes = await Vote.find({
-        userId: req.user.id,
-        matchId: { $gte: matches[0]._id },
+        user: req.user.id,
+        match: { $gte: matches[0]._id },
       })
         .limit(matchOfWeekCount)
-        .sort({ matchId: 1 });
+        .sort({ match: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
+      // matches = helper.mapMatchVote(matches, ['0']);
+      console.log('test');
     } else {
       matches = helper.mapMatchVote(matches, ['0']);
-    }
-    let isEmpty = false;
-
-    if (matches.length == 0) {
-      isEmpty = true;
+      console.log('test2');
     }
 
     res.send(matches);
@@ -143,7 +141,7 @@ router.post('/vote', async (req, res) => {
     /** TODO: 투표와 경기의 투표수 업데이트를 트랜잭션으로 바꿔야함. */
     const body = req.body;
     const matchIds = Object.keys(body);
-    const userId = req.user.id;
+    const user = req.user.id;
     let votedArr = [];
     if (matchIds.length == 0) {
       try {
@@ -160,8 +158,8 @@ router.post('/vote', async (req, res) => {
       const query = {};
       query[voteTo] = 1; //쿼리를 이런식으로 작성해야됨 바로 오브젝트{}에서 작성 불가
       const vote = await Vote.findOne({
-        userId: userId,
-        matchId: id,
+        user: user,
+        match: id,
       });
 
       if (vote) {
@@ -169,8 +167,8 @@ router.post('/vote', async (req, res) => {
         continue;
       } else {
         Vote.create({
-          userId: userId,
-          matchId: id,
+          user: user,
+          match: id,
           voteTo: votedTeam,
           processed: false,
           point: 0,

@@ -6,3 +6,4 @@ crawl/__pycache__
 
 # critical data
 *.env
+crawl/__pycache__/setting.cpython-38.pyc

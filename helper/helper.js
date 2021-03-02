@@ -44,18 +44,19 @@ module.exports = {
     while (matchIdx < matches.length) {
       const obj = matches[matchIdx].toObject();
       obj['userVote'] = '';
-      if (!(voteIdx < votes.length)) {
+      if (voteIdx >= votes.length) {
         mapedArr.push(obj);
         matchIdx++;
         continue;
       }
 
-      if (obj._id == votes[voteIdx].matchId) {
+      if (obj._id == votes[voteIdx].match) {
         obj['userVote'] = votes[voteIdx].voteTo;
         voteIdx++;
         matchIdx++;
-      } else if (obj._id > votes[voteIdx].matchId) {
+      } else if (obj._id > votes[voteIdx].match) {
         voteIdx++;
+        continue;
       } else {
         matchIdx++;
       }
