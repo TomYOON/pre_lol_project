@@ -20,7 +20,7 @@ router.get('/:user', async (req, res) => {
     const user = req.params.user;
     const votes = await Vote.find({ user: user })
       .populate('match')
-      .sort({ matchId: -1 });
+      .sort({ match: -1 });
     console.log(votes);
 
     res.render('userVotes', { votes });
@@ -117,8 +117,12 @@ router.post('/login', (req, res, next) => {
 
 // Logout Handle
 router.get('/logout', (req, res) => {
-  req.logout(); //passport middleware에 있는 함수
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/users/login');
+  try {
+    req.logout(); //passport middleware에 있는 함수
+    req.flash('success_msg', 'You are logged out');
+    res.redirect('/');
+  } catch (error) {
+    next();
+  }
 });
 module.exports = router;

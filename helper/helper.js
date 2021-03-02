@@ -50,11 +50,11 @@ module.exports = {
         continue;
       }
 
-      if (obj._id == votes[voteIdx].matchId) {
+      if (obj._id == votes[voteIdx].match) {
         obj['userVote'] = votes[voteIdx].voteTo;
         voteIdx++;
         matchIdx++;
-      } else if (obj._id > votes[voteIdx].matchId) {
+      } else if (obj._id > votes[voteIdx].match) {
         voteIdx++;
       } else {
         matchIdx++;

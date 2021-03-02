@@ -40,6 +40,7 @@ router.get('/', async (req, res) => {
         match: { $gte: matches[0]._id },
       }).sort({ matchId: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
+      console.log(`index.js - Vote: ${userVotes}`);
     } else {
       matches = helper.mapMatchVote(matches, ['0']);
     }
@@ -48,7 +49,6 @@ router.get('/', async (req, res) => {
     if (matches.length == 0) {
       isEmpty = true;
     }
-
     res.render('main', {
       matches,
       userName,
