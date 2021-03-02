@@ -28,7 +28,7 @@
             <%if (typeof userName == 'undefined' || userName === '') {%>
             <a href="/users/login">로그인</a>
             <%} else {%>
-            <a href="/users/<%=user%>"><%=userName%>님</a>
+            <a href="/users/vote/<%=user%>"><%=userName%>님</a>
             <span><%=userPoint%> points</span>
             <a href="users/logout">로그아웃</a>
             <% }%>
