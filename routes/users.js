@@ -14,14 +14,16 @@ router.get('/login', (req, res) => res.render('login'));
 // Register Page
 router.get('/register', (req, res) => res.render('register'));
 
-// User page
-router.get('/:user', async (req, res) => {
+// @desc user vote randing page
+// @route GET /users/vote/:userId
+router.get('/vote/:userId', async (req, res) => {
   try {
-    const user = req.params.user;
-    const votes = await Vote.find({ user: user })
+    const userId = req.params.userId;
+
+    const votes = await Vote.find({ user: userId })
       .populate('match')
       .sort({ match: -1 });
-    console.log(votes);
+    // console.log(`user.js: vote: ${votes}`);
 
     res.render('userVotes', { votes });
   } catch (err) {

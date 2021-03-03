@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
       const userVotes = await Vote.find({
         user: req.user.id,
         match: { $gte: matches[0]._id },
-      }).sort({ matchId: 1 });
+      }).sort({ match: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
       console.log(`index.js - Vote: ${userVotes}`);
     } else {
@@ -111,18 +111,16 @@ router.get('/match', async (req, res) => {
       //로그인 되어있으면 투표한 데이터를 넘겨줌
       const userVotes = await Vote.find({
         user: req.user.id,
-        matchId: { $gte: matches[0]._id },
+        match: { $gte: matches[0]._id },
       })
         .limit(matchOfWeekCount)
-        .sort({ matchId: 1 });
+        .sort({ match: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
+      // matches = helper.mapMatchVote(matches, ['0']);
+      console.log('test');
     } else {
       matches = helper.mapMatchVote(matches, ['0']);
-    }
-    let isEmpty = false;
-
-    if (matches.length == 0) {
-      isEmpty = true;
+      console.log('test2');
     }
 
     res.send(matches);
@@ -161,7 +159,7 @@ router.post('/vote', async (req, res) => {
       query[voteTo] = 1; //쿼리를 이런식으로 작성해야됨 바로 오브젝트{}에서 작성 불가
       const vote = await Vote.findOne({
         user: user,
-        matchId: id,
+        match: id,
       });
 
       if (vote) {
