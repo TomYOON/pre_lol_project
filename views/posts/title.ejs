@@ -12,16 +12,18 @@
 
     <div class="card">
         <!--title, content, date, updated에 데베랑 연결해주세요..!-->
-        <h5 class="card-header text-white bg-primary mb-3">title</h5>
+        <h5 class="card-header text-white bg-primary mb-3"><%=post.title%></h5>
         <div class="row">
             <div class="col-md-7 col-lg-8 col-xl-9 order-sm-2 order-md-1">
-                <div class="post-body p-2">content</div>
+                <div class="post-body p-2"><%=post.body%></div>
             </div>
 
             <div class="col-md-5 col-lg-4 col-xl-3 order-sm-1 order-md-2">
                 <div class="post-info card bg-light m-2 p-2">
-                    <div><span>Created</span> : date</div>
-                    <div><span>Updated</span> : date </div>
+                    <div><span>Created</span> : <%=post.createdAt%></div>
+                    <%if (typeof post.updatedAt != 'undefined') {%>
+                    <div><span>Updated</span> : <%=post.updatedAt%> </div>
+                    <%}%>
                 </div>
             </div>
 

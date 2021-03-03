@@ -5,7 +5,7 @@ var Counter = require('./Counter');
 var postSchema = mongoose.Schema({
   title: { type: String, required: [true, 'Title is required!'] },
   body: { type: String, required: [true, 'Body is required!'] },
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   views: { type: Number, default: 0 },
   numId: { type: Number },
   createdAt: { type: Date, default: Date.now },
