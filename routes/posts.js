@@ -14,7 +14,8 @@ router.get('/', async (req, res) => {
     const posts = await Post.find()
       .skip((page - 1) * pagePerPost)
       .limit(pagePerPost)
-      .populate('author', 'name');
+      .populate('author', 'name')
+      .sort({ createdAt: -1 });
     console.log(posts[0]);
     res.render('posts/board', {
       postCount,
