@@ -1,7 +1,7 @@
 {
   "name": "pre_lol",
   "version": "1.0.0",
-  "description": "",
+  "description": "lck 경기 예측 투표 웹 어플리케이션",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -20,5 +20,13 @@
     "nodemon": "^2.0.6",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomYOON/pre_lol_project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TomYOON/pre_lol_project/issues"
+  },
+  "homepage": "https://github.com/TomYOON/pre_lol_project#readme"
 }
