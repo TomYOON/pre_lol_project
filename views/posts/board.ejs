@@ -1,0 +1,51 @@
+<!--게시물 목록을 보여주는 페이지입니다!-->
+
+<div class="container mb-3">
+    
+    <h2 class="mb-3">board</h2>
+
+    <table class="board-table table table-sm border-bottom">
+        <thead class=" text-white bg-dark mb-3">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">author</th>
+                <th scope="col">views</th>
+                <th scope="col" class="date">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--게시물가 있으면 반복 출력 없으면 이부분 주석빼주세요!
+                <tr> <td colspan=2> There is no data to show :( </td></tr>
+                만약 게시물이 있다면 각 게시물마다 이 구문 반복하면 됩니당 -->
+            <% for (let i = 0; i < posts.length; i++) { %>
+                <tr>
+                    <td>
+                        <span class="post_number"><%=posts[i].numId%></span>
+                    </td>
+                    <td>
+                        <!--아래 title부분 서버 연결되면 클릭했을때 게시물로 들어가도록 가능할까요?!-->
+                        <a href=/posts/<%=posts[i]._id%>>
+                            <div class="ellipsis"><%=posts[i].title%></div>
+                        </a>
+                    </td>
+                    <td>
+                        <span><%=posts[i].author.name%><span>
+                    </td>
+                    <td class="views">
+                        <span><%=posts[i].views%><span>
+                    </td>
+                    <td class="date">
+                        <span><%=posts[i].createdAt%><span>
+                    </td>
+                </tr>
+            <%}%>
+            <!--반복은 여기까지-->
+        </tbody>
+    </table>
+
+    <div>
+        <a class="btn btn-primary" href="/posts/new">New</a>
+    </div>
+
+</div>
