@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-
+  res.locals.user = undefined;
   if (req.isAuthenticated()) {
     res.locals.userName = req.user.name;
     res.locals.userPoint = req.user.point;
