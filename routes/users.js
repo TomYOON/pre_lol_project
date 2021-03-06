@@ -9,10 +9,10 @@ const Vote = require('../models/Vote');
 const Match = require('../models/Match');
 
 // Login Page
-router.get('/login', (req, res) => res.render('users/login'));
+router.get('/login', (req, res) => res.render('login'));
 
 // Register Page
-router.get('/register', (req, res) => res.render('users/register'));
+router.get('/register', (req, res) => res.render('register'));
 
 // @desc user vote randing page
 // @route GET /users/vote/:userId
@@ -25,7 +25,7 @@ router.get('/vote/:userId', async (req, res) => {
       .sort({ match: -1 });
     // console.log(`user.js: vote: ${votes}`);
 
-    res.render('user-votes', { votes });
+    res.render('userVotes', { votes });
   } catch (err) {
     console.log(err);
   }
@@ -52,7 +52,7 @@ router.post('/register', (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render('users/register', {
+    res.render('register', {
       errors,
       name,
       email,
@@ -65,7 +65,7 @@ router.post('/register', (req, res) => {
       if (user) {
         // User exists
         errors.push({ msg: 'Email is already registered' });
-        res.render('users/register', {
+        res.render('register', {
           errors,
           name,
           email,

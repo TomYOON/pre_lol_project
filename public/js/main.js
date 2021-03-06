@@ -35,6 +35,11 @@ function buildVoteForm(htmlStr) {
   <input type="button" value="투표하기" class="voteSubmit__btn"/>`;
 }
 
+
+
+
+
+
 /** @return {String} */
 function biuldMatchHtml(match) {
   const dateValid =
@@ -44,6 +49,8 @@ function biuldMatchHtml(match) {
       : 'disabled';
 
   const htmlString = `
+  <div class="matching">
+
   <label class="left__team ${match.userVote == 'home' ? 'voted' : ''}">
   <input type="radio" name=${
     match._id
@@ -60,10 +67,16 @@ function biuldMatchHtml(match) {
     <input type="radio" name=${
       match._id
     } id="vote__input" value='away' class="match__ladioBtn" ${dateValid}/>
-  </label>
+  </label></div>
   `;
   return htmlString;
 }
+
+
+
+
+
+
 
 // fetch function
 /** @return {Array<object>} */
@@ -155,7 +168,10 @@ function viewThisWeekMatch() {
   for (const dayMappedMatch of curMatches) {
     const matchDiv = document.createElement('div');
     const dateSpan = document.createElement('span');
+      
     matchDiv.classList.add('day__match');
+    dateSpan.classList.add('dateSpan');
+      
     dateSpan.innerHTML = `${dayMappedMatch[0].gameStartDate} (${getDay(
       dayMappedMatch[0].gameStartDate
     )})`;
@@ -178,6 +194,8 @@ function viewThisWeekMatch() {
     container.appendChild(matchDiv);
   }
 }
+
+
 
 /** @return {String} */
 function formatDate(date) {
