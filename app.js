@@ -6,6 +6,7 @@ const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -38,6 +39,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
+//form method override
+app.use(methodOverride('_method'));
+
 //connect db
 connectDB();
 
@@ -49,7 +53,7 @@ app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-  res.locals.user = undefined;
+  res.locals.user = '';
   if (req.isAuthenticated()) {
     res.locals.userName = req.user.name;
     res.locals.userPoint = req.user.point;

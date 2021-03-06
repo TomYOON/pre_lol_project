@@ -35,11 +35,6 @@ function buildVoteForm(htmlStr) {
   <input type="button" value="투표하기" class="voteSubmit__btn"/>`;
 }
 
-
-
-
-
-
 /** @return {String} */
 function biuldMatchHtml(match) {
   const dateValid =
@@ -72,16 +67,10 @@ function biuldMatchHtml(match) {
   return htmlString;
 }
 
-
-
-
-
-
-
 // fetch function
 /** @return {Array<object>} */
 async function fetchMatch(date, next = true) {
-  console.log(date);
+  // console.log(date);
   const data = await fetch(
     `/match?date=${formatDate(date)}&next=${next}`
   ).then((res) => res.json());
@@ -90,7 +79,7 @@ async function fetchMatch(date, next = true) {
 
 /** @return {Array<object>} */
 async function fetchVote(votes) {
-  console.log(votes);
+  // console.log(votes);
   let data = await fetch('/vote', {
     method: 'POST',
     headers: {
@@ -168,10 +157,10 @@ function viewThisWeekMatch() {
   for (const dayMappedMatch of curMatches) {
     const matchDiv = document.createElement('div');
     const dateSpan = document.createElement('span');
-      
+
     matchDiv.classList.add('day__match');
     dateSpan.classList.add('dateSpan');
-      
+
     dateSpan.innerHTML = `${dayMappedMatch[0].gameStartDate} (${getDay(
       dayMappedMatch[0].gameStartDate
     )})`;
@@ -195,8 +184,6 @@ function viewThisWeekMatch() {
   }
 }
 
-
-
 /** @return {String} */
 function formatDate(date) {
   if (typeof date == typeof new Date()) {
@@ -210,7 +197,7 @@ function formatDate(date) {
 async function getNextMatch() {
   leftBtn.disabled = false;
   alertSpan.innerHTML = '';
-  console.log(matches[curIdx][0][0].gameStartDate);
+  // console.log(matches[curIdx][0][0].gameStartDate);
   if (curIdx === matches.length - 1) {
     const curDate = new Date(matches[curIdx][0][0].gameStartDate);
     curDate.setDate(curDate.getDate() + 7);
@@ -233,11 +220,10 @@ async function getNextMatch() {
 async function getPrevMatch() {
   alertSpan.innerHTML = '';
   rightBtn.disabled = false;
-  console.log(matches[curIdx][0][0].gameStartDate);
+  // console.log(matches[curIdx][0][0].gameStartDate);
   if (curIdx === 0) {
     const curDate = new Date(matches[curIdx][0][0].gameStartDate);
     curDate.setDate(curDate.getDate() - 7);
-    console.log(123, curDate);
     const matchArr = await fetchMatch(curDate, (next = false));
     if (matchArr.length > 0) {
       // matches.push(mapMatchDay(matchArr));
@@ -269,7 +255,7 @@ async function submitVote(event) {
   }
   if (votes) {
     const data = await fetchVote(votes);
-    console.log(data);
+    // console.log(data);
     if (data.status == 'login') {
       alert('로그인이 필요합니다.');
     } else if (data.status == 'OK') {
