@@ -49,6 +49,12 @@ app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
+
+  if (req.isAuthenticated()) {
+    res.locals.userName = req.user.name;
+    res.locals.userPoint = req.user.point;
+    res.locals.user = req.user._id;
+  }
   next();
 });
 
@@ -60,7 +66,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/rank', require('./routes/ranking'));
-app.use('/board', require('./routes/board'));
+app.use('/posts', require('./routes/posts'));
 
 const PORT = process.env.PORT || 5000; //앞에 포트가 안될 경우 5000
 
