@@ -41,8 +41,45 @@ a {
     color: white;
 }
 
+.bold {
+    font-weight: bold;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.white {
+    color: white;
+}
+
+#pageCount {
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+}
+
+#pageCount tr {
+    background-color: #e9ecef;
+    outline: none;
+}
 
 
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.button-group a {
+    display: flex;
+    width: 100x;
+    height: 50px;
+    color: white;
+    margin-right: 5px;
+}
+
+#board-table {
+    border-radius: 15px;
+}
 
 header {
     display: flex;
@@ -149,9 +186,6 @@ ul {
 .yet {
     font-size: 13px;
 }
-
-
-
 
 
 td {
@@ -262,9 +296,34 @@ button {
     opacity: 50%;
 }
 
+
+
+
 .day__match {
     padding: 30px 0;
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
+
+.dateSpan {
+    font-weight: bold;
+    width: 100px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.matching {
+    display: flex;
+    justify-content: center;
+    background-color: #6395d1;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 100%;
+}
+
+
 
 footer {
     background-color: var(--background-color);
@@ -278,28 +337,31 @@ footer {
 }
 
 .left__button {
+    background-color: #f5f6f7;
     border: 0px;
     outline: 0px;
     color: white;
     font-size: 20px;
-    background-color: #787cff;
-    border-radius: 5px;
+
+
 }
 
+
 .right__button {
+    background-color: #f5f6f7;
     border: 0px;
     outline: 0px;
     color: white;
     font-size: 20px;
-    background-color: #787cff;
-    border-radius: 5px;
+    font-weight: bold;
+
 }
 
 .voteSubmit__btn {
     border: 0px;
     outline: 0px;
     color: white;
-    background-color: #787cff;
+    background-color: #007bff;
     border-radius: 5px;
 }
 }

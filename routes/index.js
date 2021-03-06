@@ -116,8 +116,11 @@ router.get('/match', async (req, res) => {
         .limit(matchOfWeekCount)
         .sort({ match: 1 });
       matches = helper.mapMatchVote(matches, userVotes);
+      // matches = helper.mapMatchVote(matches, ['0']);
+      console.log('test');
     } else {
       matches = helper.mapMatchVote(matches, ['0']);
+      console.log('test2');
     }
 
     res.send(matches);
