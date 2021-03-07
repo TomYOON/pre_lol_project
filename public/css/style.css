@@ -1,6 +1,6 @@
 :root {
     --text-color: #f0f4f5;
-    --background-color: #2b4fff;
+    --background-color: #2c4cfb;
     /* --background-light-color: #90caf9; */
     --accent-color: #d49466;
 
@@ -108,7 +108,7 @@ header {
     flex-direction: row;
     flex-wrap: nowrap;
 
-    background-color: #2b4fff;
+    background-color:  #2c4cfb;
     padding: var(--pading);
 }
 
@@ -346,6 +346,20 @@ footer {
 
 }
 
+.rightButton {
+    border: 0px;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: transparent;
+}
+
+.leftButton {
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: transparent;
+    border: 0px;
+
+}
 
 .right__button {
     background-color: #f5f6f7;
@@ -364,6 +378,20 @@ footer {
     background-color: #007bff;
     border-radius: 5px;
 }
+
+.matching_2 {
+    display: flex;
+    color: black;
+    justify-content: center;
+    background-color: #e9ecef;
+    background-image: none !important;
+    border-color: transparent;
+    border: 0px;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 100%;
+}
+
 }
 
 /* IMAGE STYLES */

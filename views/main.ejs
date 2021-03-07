@@ -1,20 +1,26 @@
 <body onload="processMatch(<%=JSON.stringify(matches)%>);"></body>
+
 <div class="matches">
     <div class="match__title">
-        <button class="left__button"><i class="fas fa-chevron-left"></i></button>
+        <button class="left__button"> <i class="fas fa-caret-left" area-hidden="true" style="color:#2353a5; font-size:50px;"></i></button>
         <span class="match__day">
-            <h3>경기 목록</h3>
+            <h3>
+                <div class="bold">경기 목록</div>
+            </h3>
         </span>
         <button class="right__button">
-            <i class="fas fa-chevron-right"></i></button>
+            <i class="fas fa-caret-right" area-hidden="true" style="color:#2353a5;font-size:50px;"></i></button>
     </div>
-
+    <hr>
     <span class="alert__msg"></span>
     <form method="post" action='/vote' name="voteSubmit" class="vote__form">
-        <div class="vote__container">
 
+        <div class="jumbotron my-5 ">
+            <div class="vote__container">
+
+            </div>
         </div>
-
+        <hr>
         <!-- <input type="submit" value="투표하기" class="voteSubmit__btn"/> -->
         <button type="submit" class="voteSubmit__btn">투표하기</button>
     </form>
