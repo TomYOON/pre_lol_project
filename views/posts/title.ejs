@@ -31,7 +31,8 @@
     </div>
 
     <div class="mt-3">
-        <a class="btn btn-primary" href="/posts"><div class="white">Back</div></a>
+        <a class="btn btn-secondary" href="/posts"><div class="white">Back</div></a>
+        <a class="btn btn-primary" href="/posts"><div class="white">Edit</div></a>
         <!-- DELETE -->
         <form method="POST" class="d-inline" action="/posts/<%=post._id%>?_method=DELETE"> 
             <%if (user.toString() === post.author._id.toString()) {%>
