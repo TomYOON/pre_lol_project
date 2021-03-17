@@ -50,13 +50,13 @@ a {
     color: white;
 }
 
-#pageCount {
+#page-count {
     font-weight: bold;
     font-size: 20px;
     border: none;
 }
 
-#pageCount tr {
+#page-count tr {
     background-color: #e9ecef;
     outline: none;
 }
@@ -88,7 +88,7 @@ header {
     background-color: var(--background-color);
 }
 
-#topNav {
+#top-nav {
     background-color: #0026ca;
     display: flex;
     width: 100%;
@@ -97,7 +97,7 @@ header {
     padding: 5px;
 }
 
-#topNav a {
+#top-nav a {
     color: white;
 }
 
@@ -230,7 +230,7 @@ button {
     text-align: center;
 }
 
-.team__name {
+.team_name {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -246,7 +246,7 @@ button {
     text-align: center;
 }
 
-.left__team {
+.team_left {
     text-align: center;
     display: flex;
     width: 280px;
@@ -258,7 +258,7 @@ button {
     margin: 10px 0px;
 }
 
-.right__team {
+.team_right {
     display: flex;
     width: 280px;
     padding: 0 10px;
@@ -313,7 +313,7 @@ button {
     margin-bottom: 20px;
 }
 
-.dateSpan {
+.date-span {
     font-weight: bold;
     width: 100px;
     height: 50px;
@@ -343,7 +343,7 @@ footer {
     color: white;
 }
 
-.left__button {
+.left-button--blue {
     background-color: #f5f6f7;
     border: 0px;
     outline: 0px;
@@ -353,14 +353,14 @@ footer {
 
 }
 
-.rightButton {
+.right-button {
     border: 0px;
     background-color: transparent !important;
     background-image: none !important;
     border-color: transparent;
 }
 
-.leftButton {
+.left-button {
     background-color: transparent !important;
     background-image: none !important;
     border-color: transparent;
@@ -368,7 +368,7 @@ footer {
 
 }
 
-.right__button {
+.right-button--blue {
     background-color: #f5f6f7;
     border: 0px;
     outline: 0px;
@@ -378,7 +378,7 @@ footer {
 
 }
 
-.voteSubmit__btn {
+.vote-submit-btn {
     border: 0px;
     outline: 0px;
     color: white;
@@ -386,7 +386,7 @@ footer {
     border-radius: 5px;
 }
 
-.matching_2 {
+.user-matching-component {
     display: flex;
     color: black;
     justify-content: center;
@@ -402,8 +402,3 @@ footer {
 .vs{margin: 0 10px;}
 
 }
-
-/* IMAGE STYLES */
-/* [type='radio'] + img {
-  cursor: pointer;
-} */

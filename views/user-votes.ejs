@@ -1,5 +1,4 @@
 <div class="container  my-5 mb-3">
-
     <ul class="list-group">
         <li class="list-group-item active">
             <h3>
@@ -8,17 +7,17 @@
         </li>
         <% for (let i=0; i < votes.length; i++) {%>
             <li class="list-group-item">
-                <div class="matching_2">
-                <span class="user__vote" hidden><%=votes[i].voteTo%></span>
+                <div class="user-matching-component">
+                <span class="user-vote" hidden><%=votes[i].voteTo%></span>
                 <span class="match__date" hidden><%=votes[i].match.gameStartDate%></span>
-                <div class="left__team">
+                <div class="team_left">
                     <img src="/images/<%=votes[i].match.homeTeamCode%>.png" alt="team logo" />
                     <span class="team__name"><%=votes[i].match.homeTeamName%></span>
                     <span class="votes"><%=votes[i].match.homeTeamVotes%></span>
                 </div>
                 <!-- <span class="vs">VS</span> -->
                 <span class="vs">날짜: <%=votes[i].match.gameStartDate%> 획득 포인트: <%=votes[i].point%></span>
-                <div class="right__team">
+                <div class="team_right">
                     <span class="votes"><%=votes[i].match.awayTeamVotes%></span>
                     <span class="team__name"><%=votes[i].match.awayTeamName%></span>
                     <img src="/images/<%=votes[i].match.awayTeamCode%>.png" alt="team logo" />

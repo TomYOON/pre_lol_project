@@ -1,11 +1,11 @@
 //query selector
 const outputDiv = document.querySelector('.output');
-const container = document.querySelector('.vote__container');
-const rightBtn = document.querySelector('.right__button');
-const leftBtn = document.querySelector('.left__button');
+const container = document.querySelector('.vote-container');
+const rightBtn = document.querySelector('.right-button--blue');
+const leftBtn = document.querySelector('.left-button--blue');
 const matchDay = document.querySelector('.match__day');
-const voteBtn = document.querySelector('.voteSubmit__btn');
-const alertSpan = document.querySelector('.alert__msg');
+const voteBtn = document.querySelector('.vote-submit-btn');
+const alertSpan = document.querySelector('.alert-msg');
 
 //event
 rightBtn.addEventListener('click', getNextMatch);
@@ -32,7 +32,7 @@ function processMatch(match) {
 function buildVoteForm(htmlStr) {
     return `<form method="post" action='/vote' name="voteSubmit" class="vote__form">
   ${htmlStr}
-  <input type="button" value="투표하기" class="voteSubmit__btn"/>`;
+  <input type="button" value="투표하기" class="vote-submit__btn"/>`;
 }
 
 /** @return {String} */
@@ -47,10 +47,10 @@ function biuldMatchHtml(match) {
 
     const htmlString = `
   <div class="matching">    
-  <label class="left__team ${match.userVote == 'home' ? 'voted' : ''}"  style="background-color:${match.homeTeamVotes>match.awayTeamVotes? '#2c4cfb' : '#6395d1'}">
+  <label class="team_left ${match.userVote == 'home' ? 'voted' : ''}"  style="background-color:${match.homeTeamVotes>match.awayTeamVotes? '#2c4cfb' : '#6395d1'}">
   <input type="radio" name=${
     match._id
-  } id="vote__input" value='home' class="match__ladioBtn" ${dateValid}/>
+  } id="vote__input" value='home' class="match_radio-btn" ${dateValid}/>
     <img src="/images/${match.homeTeamCode}.png" alt="team logo" />
     <span class="team__name">${match.homeTeamName}</span>
     <span class="votes">${match.homeTeamVotes}표</span>
@@ -58,13 +58,13 @@ function biuldMatchHtml(match) {
 
   <span class="vs">VS</span>
 
-  <label class="right__team ${match.userVote == 'away' ? 'voted' : ''}" style="background-color:${match.homeTeamVotes<match.awayTeamVotes? '#2c4cfb' : '#6395d1'}">
+  <label class="team_right ${match.userVote == 'away' ? 'voted' : ''}" style="background-color:${match.homeTeamVotes<match.awayTeamVotes? '#2c4cfb' : '#6395d1'}">
     <span class="votes">${match.awayTeamVotes}표</span>
     <span class="team__name">${match.awayTeamName}</span>
     <img src="/images/${match.awayTeamCode}.png" alt="team logo" />
     <input type="radio" name=${
       match._id
-    } id="vote__input" value='away' class="match__ladioBtn" ${dateValid}/>
+    } id="vote__input" value='away' class="match_radio-btn" ${dateValid}/>
   </label></div>
   `;
 
@@ -164,7 +164,7 @@ function viewThisWeekMatch() {
         const dateSpan = document.createElement('span');
 
         matchDiv.classList.add('day__match');
-        dateSpan.classList.add('dateSpan');
+        dateSpan.classList.add('date-span');
 
         dateSpan.innerHTML = `${dayMappedMatch[0].gameStartDate} (${getDay(
       dayMappedMatch[0].gameStartDate
