@@ -2,10 +2,10 @@
     <div class="col-md-10 m-auto">
         <h1 class="text-center mb-3">
             <div class="match__title">
-                <button class="leftButton">
+                <button class="left-button">
                     <i class="fas fa-caret-left" area-hidden="true" style="color:black; font-size:50px;"></i></button>&nbsp;&nbsp;
                 <div class="bold">Ranking</div>&nbsp;&nbsp; 
-                <button class="rightButton"><i class="fas fa-caret-right" area-hidden="true" style="color:black; font-size:50px;"></i></button>
+                <button class="right-button"><i class="fas fa-caret-right" area-hidden="true" style="color:black; font-size:50px;"></i></button>
             </div>
         </h1>
         <br>
@@ -31,7 +31,7 @@
           
  <br><br>
           
-          <table id="pageCount">
+          <table id="page-count">
               <tr>
         <% for (let i = 1; i < userObj['userCount'] / userObj['pagePerUsers'] + 1; i++) {%>
                 <td> <a href="/rank/<%=i%>"><%=i%></a></td>

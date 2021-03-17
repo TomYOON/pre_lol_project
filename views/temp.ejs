@@ -1,9 +1,9 @@
 <!-- test -->
 <div class="matches">
   <div class="match__title">
-    <button class="left__button"><i class="fas fa-chevron-left"></i></button>
+    <button class="left-button--blue"><i class="fas fa-chevron-left"></i></button>
     <span class="match__day">Today's match</span>
-    <button class="right__button"><i class="fas fa-chevron-right"></i></button>
+    <button class="right-button--blue"><i class="fas fa-chevron-right"></i></button>
     <form method="GET" action="/change-month" hidden name="changeMonth">
       <input type="text" name="date" id="date">
     </form>
@@ -14,29 +14,27 @@
       <a href="/">돌아가기</a>
       <%} else {%>
         <form method="post" action='/vote' name="voteSubmit" class="vote__form">
-
         <% for (let i = 0; i < matches.length; i++) { %>
           <li class="match__list">
-            <span class="user__vote" hidden><%=matches[i].userVote%></span>
-            <span class="match__date" hidden><%=matches[i].gameStartDate%></span>
+            <span class="user-vote" hidden><%=matches[i].userVote%></span>
+            <span class="match-date" hidden><%=matches[i].gameStartDate%></span>
               
-            <div class="left__team">
-            <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='home' class="match__ladioBtn"/>
+            <div class="team_left">
+            <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='home' class="match_radio-btn"/>
               <img src="/images/<%=matches[i].homeTeamCode%>.png" alt="team logo" />
               <span class="team__name"><%=matches[i].homeTeamName%></span>
               <span class="votes"><%=matches[i].homeTeamVotes%></span>
             </div>
             <span class="vs">VS</span>
-            <div class="right__team">
+            <div class="team_right">
               <span class="votes"><%=matches[i].awayTeamVotes%></span>
               <span class="team__name"><%=matches[i].awayTeamName%></span>
               <img src="/images/<%=matches[i].awayTeamCode%>.png" alt="team logo" />
-              <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='away' class="match__ladioBtn"/>
+              <input type="radio" name=<%=matches[i]._id%> id="vote__input" value='away' class="match_radio-btn"/>
             </div>
           </li>
-
         <% } %>
-        <input type="button" value="투표하기" class="voteSubmit__btn"/>
+        <input type="button" value="투표하기" class="vote-submit__btn"/>
         <% if(typeof errorMsg != 'undefined') {%>
           <span><%=errorMsg%></span>
           <%}%>
